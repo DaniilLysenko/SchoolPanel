@@ -12,6 +12,9 @@
     },
     "dependencies": {
         "gulp": "^3.9.1",
-        "jquery": "^3.3.1"
+        "gulp-concat": "^2.6.1",
+        "gulp-less": "^3.5.0",
+        "gulp-livereload": "^3.8.1",
+        "gulp-uglifyjs": "^0.6.2"
     }
 }
