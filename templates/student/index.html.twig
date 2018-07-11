@@ -1,20 +1,103 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block modals %}
+
+	{{ include('layouts/modals.twig') }}
+
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+	<div class="container">
+		<div class="alert alert-success alert-custom" role="alert"></div>
+		<div class="alert alert-danger alert-custom" role="alert"></div>
+		<div class="row">
+			<div class="col-sm-8">
+				<h2>Students</h2><hr>
+				<button class="btn btn-warning" data-toggle="modal" data-target="#addModal">Add Student</button>
+				<hr>
+				<table class="table students-table table-responsive">
+				  <thead>
+				    <tr>
+				      <th scope="col">Name</th>
+				      <th scope="col">Age</th>
+				      <th scope="col">Sex</th>
+				      <th scope="col">Delete</th>
+				      <th scope="col">Edit</th>
+				      <th scope="col">Page</th>
+				      <th scope="col">Teachers</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  	{% for student in students %}
+				  		<tr class="st_col{{ student.id }}">
+							<td>{{ student.name }}</td>
+							<td>{{ student.age }}</td>
+							<td>{% if (student.sex) %} man {% else %} woman {% endif %}</td>
+							<td>
+								<button class="btn btn-danger removeStudent" type="button" data-id="{{ student.id }}">Delete</button>
+							</td>
+							<td>
+								<button class="btn btn-warning editInfo" data-toggle="modal" data-id="{{ student.id }}" data-name="{{ student.name }}">Edit</button>
+							</td>
+							<td>
+								<button class="btn btn-primary openPage" data-id="{{ student.id }}">Page</button>
+							</td>
+							<td>
+								<button class="btn btn-success openTeachers" data-id="{{ student.id }}">Teachers</button>
+							</td>
+						</tr>
+				  	{% endfor %}
+				  </tbody>
+				</table>
+				<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li class="page-item"><a class="page-link" href="/school/{% if page > 1 %}{{ page - 1 }}{% else %}{{ page }}{% endif %}">Previous</a></li>
+					{% for i in 1..pages %}
+					<li class="page-item"><a class="page-link" href="/school/{{i}}">{{i}}</a></li>
+					{% endfor %}
+					<li class="page-item"><a class="page-link" href="/school/{% if page + 1 > pages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">Next</a></li>
+				</ul>
+		        <br><hr>
+		        <form id="searchStudent">
+		          <div class="form-group">
+		          	<h2>Search</h2>
+		            <input type="text" class="form-control" id="query" placeholder="Text student name" autocomplete="off"><br>
+		          </div>
+		        </form>
+		        <table class="table search-table">
+				    <tr>
+				      <th scope="col">Name</th>
+				      <th scope="col">Age</th>
+				      <th scope="col">Sex</th>
+				      <th scope="col">Delete</th>
+				      <th scope="col">Edit</th>
+				      <th scope="col">Page</th>
+				      <th scope="col">Teachers</th>
+				    </tr>
+		        </table>
+			</div>
+			<div class="col-sm-4">
+				<div class="card" style="width: 18rem;">
+					<img class="card-img-top" src="https://i1.wp.com/www.make-info.com/wp-content/uploads/2018/02/PHP.png" alt="Card image cap">
+					<div class="card-body">
+						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					</div>
+				</div><br>
+				<div class="card" style="width: 18rem;">
+					<img class="card-img-top" src="http://www.leadingittrainings.com/courselists_img/29.png" alt="Card image cap">
+					<div class="card-body">
+						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/StudentController.php'|file_link(0) }}">src/Controller/StudentController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/student/index.html.twig'|file_link(0) }}">templates/student/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+
+	<script src="{{ asset('web/js/index.js') }}"></script>
 {% endblock %}

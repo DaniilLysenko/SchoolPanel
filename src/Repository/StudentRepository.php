@@ -47,4 +47,12 @@ class StudentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getCountPages()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

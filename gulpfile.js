@@ -13,7 +13,7 @@ gulp.task('less', function() {
 });
 
 gulp.task('js', function() {
-    return gulp.src('./assets/js/**/*.js')
+    return gulp.src('./assets/js/*.js')
     .pipe(gulp.dest('./public/web/js'))
     .pipe(livereload());
 });

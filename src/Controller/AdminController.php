@@ -31,9 +31,18 @@ class AdminController extends Controller
     		if ($_POST['login'] === 'admin' && $_POST['password'] === 'admin') {
     			return new JsonResponse(["status" => 200]);
     		} else {
-    			return new JsonResponse(["error" => "data is incorrect"]);
+    			return new JsonResponse(["error" => "Data is incorrect"]);
     		}
     	}
-    	return new JsonResponse(["error" => "data is missing"]);
+    	return new JsonResponse(["error" => "Data is missing"]);
+    }
+
+    /**
+     * @Route("/add")
+     * @Method({"POST"})
+     */
+    public function add()
+    {
+        
     }
 }

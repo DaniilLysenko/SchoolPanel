@@ -4,6 +4,21 @@
 hr {
 	border-top: 2px solid rgba(0,0,0,.5) !important;
 }
+html,
+body {
+	height: 100%;
+}
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+.container {
+	flex: 1 0 auto;
+}
+.footer {
+	flex: 0 0 auto;
+}
 #studentModal {
 	.modal-body {
 		display: flex;
@@ -29,6 +44,9 @@ hr {
 	animation: spin 2s linear infinite;
 }
 .search-table {
+	display: none;
+}
+.alert-error {
 	display: none;
 }
 @keyframes spin {
