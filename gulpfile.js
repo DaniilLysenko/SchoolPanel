@@ -18,7 +18,6 @@ gulp.task('js', function() {
     .pipe(livereload());
 });
 
-
 gulp.task('watch', function() {
 	livereload.listen();
 	gulp.watch('./assets/less/*.less',['less']);

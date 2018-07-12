@@ -22,7 +22,7 @@ $('#addModal form').on('submit', (e) => {
 						<button class="btn btn-danger removeStudent" type="button" data-id="${response['student'].id}">Delete</button>
 					</td>
 					<td>
-						<button class="btn btn-warning" data-toggle="modal" data-target="#">Edit</button>
+						<button class="btn btn-warning" data-toggle="modal" data-target="#editModal">Edit</button>
 					</td>
 					<td><button class="btn btn-primary openPage" data-id="${response['student'].id}">Page</button></td>
 					<td><button class="btn btn-success openTeachers" data-id="${response['student'].id}">Teachers</button></td>
@@ -38,7 +38,7 @@ $('#addModal form').on('submit', (e) => {
 	})
 });
 
-$('.table').on('click', '.openPage', function() {
+$('.students-table').on('click', '.openPage', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
 		url: '/ajax/student.php',
@@ -69,20 +69,49 @@ $('.table').on('click', '.openPage', function() {
 	});
 });	
 
-$('.table').on('click', '.removeStudent', function() {
+$('.students-table').on('click', '.removeStudent', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
-		url: '/ajax/student.php',
+		url: '/remove',
 		type: 'POST',
-		data: {id, type: 'removeStudent'},
-		success: (response) => {
-			$('.st_col'+id).remove();
-			showSuccessAlert('Student removed successfuly! :)');
+		data: {id},
+		complete: response => {
+			if (!response.responseJSON.errors) {
+				$('.st_col'+id).remove();
+				showSuccessAlert('Student removed successfuly! :)');
+			}
 		}
 	});
 });
 
-$('.table').on('click', '.openTeachers', function() {
+$('.table').on('click', '.editInfo', function() {
+	$('#editModal .modal-title').text('Edit ' + $(this).attr('data-name') + ' info');
+	$('#editModal form #edit_id').val($(this).attr('data-id'));
+	$('#editModal').modal();
+});
+
+$('#editModal form').on('submit', function(e) {
+	e.preventDefault();
+	let formData = new FormData($(this)[0]);
+	$.ajax({
+		url: '/edit',
+		data: formData,
+		cache: false,
+    	contentType: false,
+    	processData: false,
+    	type: 'POST',
+    	complete: response => {
+    		if (response.responseJSON.errors) {
+    			showDangerAlert(response.responseJSON.errors);
+    		} else {
+    			showSuccessAlert("You\'ve updated image succefully");
+    		}
+    	}
+	});
+});
+
+
+$('.students-table').on('click', '.openTeachers', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
 		url: '/ajax/teacher.php',
@@ -177,37 +206,6 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 			`);
 			showSuccessAlert('Teacher added successfuly! :)');			
 		}
-	});
-});
-
-$('.table').on('click', '.editInfo', function() {
-	$('#editModal .modal-title').text('Edit ' + $(this).attr('data-name') + ' info');
-	$('#uploadImage #sid').val($(this).attr('data-id'));
-	$('#editModal').modal();
-});
-
-$('#editModal').on('submit', '#uploadImage', (e) => {
-	e.preventDefault();
-	let formData = new FormData();
-	formData.append('sid', $('#uploadImage #sid').val());
-	formData.append('image', $('#uploadImage #image').prop('files')[0]);
-	formData.append('type', 'uploadImage');
-	$.ajax({
-		url: '/ajax/student.php',
-		data: formData,
-		cache: false,
-    	contentType: false,
-    	processData: false,
-    	type: 'POST',
-    	success: (response) => {
-    		response = JSON.parse(response);
-    		if (response.result) {
-    			showSuccessAlert("You\'ve updated image succefully");
-    			$('#uploadImage #image').val("");
-    		} else {
-    			showDangerAlert("You have an error. Try adain!");
-    		}
-    	}
 	});
 });
 

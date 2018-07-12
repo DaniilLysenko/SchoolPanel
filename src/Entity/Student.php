@@ -37,7 +37,7 @@ class Student
     /**
      * @ORM\Column(type="string", length=10)
      * @Assert\Choice({"man", "woman"}, message="Choice valid sex type")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Sex type can not be blank")
      */
     private $sex;
 

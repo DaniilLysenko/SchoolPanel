@@ -9,10 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Student;
 use App\Forms\StudentType;
+use App\Forms\EditType;
 
 class AdminController extends JsonController
 {
@@ -30,7 +32,6 @@ class AdminController extends JsonController
      * @Route("/login")
      * @Method({"POST"})
      */
-
     public function login()
     {
     	if (isset($_POST['login']) && isset($_POST['password'])) {
@@ -60,40 +61,51 @@ class AdminController extends JsonController
         ]), 200);
     }
 
-    // Rerender form (another variant to code above)
-
-    // public function addAction(Request $request)
-    // {
-    //     $student = new Student();
-    //     $form = $this->createForm(StudentType::class, $student);
-    //     $form->handleRequest($request);
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $this->getDoctrine()->getManager()->persist($student);
-    //         $this->getDoctrine()->getManager()->flush();
-    //         return new JsonResponse(array('message' => 'Success!'), 200);
-    //     } 
-    //     $response = new JsonResponse(array(
-    //         'message' => 'Error',
-    //         'form' => $this->renderView('layouts/form.html.twig',array('addForm' =>$form->createView()))), 400
-    //     );
-    //     return $response;
-    // }
-
     /**
      * @Route("/remove", name="remove")
      * @Method({"POST"})
      */
-    public function remove()
+    public function remove(Request $request)
     {
-        if (isset($_POST['id'])) {
-            if (!preg_match('/[0-9]/',$_POST['id'])) {
-                return new JsonResponse(["errors" => array("Id is invalid")]);
+        if (!is_null($request->get('id'))) {
+            $student = $this->getDoctrine()->getRepository(Student::class)->find($request->get('id'));
+            if ($student) {
+                $this->getDoctrine()->getManager()->remove($student);
+                $this->getDoctrine()->getManager()->flush();
+                return new JsonResponse(["success" => "OK"]);
             }
-            $student = $this->getDoctrine()->getRepository(Student::class)->find($_POST['id']);
-            $student->delete();
-            $this->getDoctrine()->getManager()->flush();
-            return new JsonResponse(["success" => "OK"]);
+            return new JsonResponse(["errors" => ["Student not found"]], 400);
         }
-        return new JsonResponse(["errors" => array("Data is missing")]);
+        return new JsonResponse(["errors" => ["Data is missing"]], 400);
+    }
+
+    /**
+     * @Route("/edit", name="edit"),
+     * @Method({"POST"})
+     */
+    public function edit(Request $request)
+    {
+        $student = new Student();
+        $form = $this->createForm(EditType::class, $student);
+        $form->handleRequest($request);
+        $mime = ['jpeg', 'png'];
+        if ($form->isSubmitted()) {
+            $file = $form->get('avatar')->getData();
+            if (in_array($file->guessExtension(), $mime)) {
+                $fileName = $form->get('id')->getData().'.'.$file->guessExtension();
+
+                $file->move($this->getParameter('avatars_directory'), $fileName);
+                $student = $this->getDoctrine()->getRepository(Student::class)->find($form->get('id')->getData()); 
+                $student->setAvatar('web/img/avatars/'.$fileName);
+                
+
+                $this->getDoctrine()->getManager()->persist($student);
+                $this->getDoctrine()->getManager()->flush();
+
+                return new JsonResponse(['success' => true], 200); 
+            }
+            return new JsonResponse(['errors' => 'Invalid image'], 400);
+        }            
+        return new JsonResponse(['errors' => 'Submit error'], 400);
     }
 }

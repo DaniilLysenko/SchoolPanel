@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\Student;
 
 use App\Forms\StudentType;
+use App\Forms\EditType;
 
 class StudentController extends Controller
 {
@@ -17,11 +18,13 @@ class StudentController extends Controller
     public function index($page = 1)
     {
     	$repository = $this->getDoctrine()->getRepository(Student::class);
-        $form = $this->createForm(StudentType::class);
+        $addForm = $this->createForm(StudentType::class);
+        $editForm = $this->createForm(EditType::class);
 
         return $this->render('student/index.html.twig', [
             'students' => $repository->findBy(array(), array('id' => 'DESC')),
-            'addForm' => $form->createView()
+            'addForm' => $addForm->createView(),
+            'editForm' => $editForm->createView()
         ]);
     }
 }
