@@ -8,29 +8,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="add_student">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Name" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="age">Age</label>
-            <input type="text" class="form-control" id="age" name="age" placeholder="Age" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="sex">Sex</label>
-            <input type="text" class="form-control" id="sex" name="sex" placeholder="Sex" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="birthday">Birthday</label>
-            <input type="text" class="form-control" id="birthday" name="birthday" placeholder="Birthday" autocomplete="off">
-          </div>
-          <button type="submit" class="btn btn-success" name="submit">Submit</button>
-        </form>
+        {% form_theme addForm 'bootstrap_4_layout.html.twig' %}
+        {{ form(addForm) }}
       </div>
     </div>
   </div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b852e8651c57a7231f3373a46c793e3",
+    "content-hash": "d78d71f8dca19f0713d9183910bfbc35",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1088,6 +1088,57 @@
                 "sql"
             ],
             "time": "2014-01-12T16:20:24+00:00"
+        },
+        {
+            "name": "mcfedr/json-form",
+            "version": "4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mcfedr/json-form.git",
+                "reference": "913a95cccbd69dd27c84f6fe6853cacb74b2e0b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mcfedr/json-form/zipball/913a95cccbd69dd27c84f6fe6853cacb74b2e0b9",
+                "reference": "913a95cccbd69dd27c84f6fe6853cacb74b2e0b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5",
+                "symfony/form": "^3.0|^4.0",
+                "symfony/framework-bundle": "^3.0|^4.0",
+                "symfony/validator": "^3.0|^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.1",
+                "phpunit/phpunit": "^4.0|^5.3",
+                "sensio/framework-extra-bundle": "~3.0",
+                "symfony/browser-kit": "^3.0|^4.0",
+                "symfony/monolog-bundle": "^3.0|^4.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Mcfedr\\JsonFormBundle\\": "src/Mcfedr/JsonFormBundle"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fred Cox",
+                    "email": "mcfedr@gmail.com"
+                }
+            ],
+            "description": "A couple of helper files for handling json with symfony forms",
+            "keywords": [
+                "Forms",
+                "json",
+                "symfony"
+            ],
+            "time": "2018-06-27T15:19:04+00:00"
         },
         {
             "name": "monolog/monolog",

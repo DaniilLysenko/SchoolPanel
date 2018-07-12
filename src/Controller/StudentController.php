@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use App\Entity\Student;
 
+use App\Forms\StudentType;
+
 class StudentController extends Controller
 {
     /**
@@ -15,12 +17,11 @@ class StudentController extends Controller
     public function index($page = 1)
     {
     	$repository = $this->getDoctrine()->getRepository(Student::class);
-        $pages = $repository->getCountPages() / 5;
-        $offset = $page > 1 ? (($page - 1) * 5) : 0;
+        $form = $this->createForm(StudentType::class);
+
         return $this->render('student/index.html.twig', [
-            'students' => $repository->findBy(array(), array('id' => 'DESC'), 5, $offset),
-            'pages' => $pages,
-            'page' => $page
+            'students' => $repository->findBy(array(), array('id' => 'DESC')),
+            'addForm' => $form->createView()
         ]);
     }
 }

@@ -2,7 +2,7 @@
 
 {% block modals %}
 
-	{{ include('layouts/modals.twig') }}
+	{{ include('layouts/modals.html.twig') }}
 
 {% endblock %}
 
@@ -50,14 +50,6 @@
 				  	{% endfor %}
 				  </tbody>
 				</table>
-				<nav aria-label="Page navigation example">
-				<ul class="pagination">
-					<li class="page-item"><a class="page-link" href="/school/{% if page > 1 %}{{ page - 1 }}{% else %}{{ page }}{% endif %}">Previous</a></li>
-					{% for i in 1..pages %}
-					<li class="page-item"><a class="page-link" href="/school/{{i}}">{{i}}</a></li>
-					{% endfor %}
-					<li class="page-item"><a class="page-link" href="/school/{% if page + 1 > pages %}{{ page }}{% else %}{{ page + 1 }}{% endif %}">Next</a></li>
-				</ul>
 		        <br><hr>
 		        <form id="searchStudent">
 		          <div class="form-group">

@@ -1,37 +1,39 @@
-$('#add_student').on('submit', (e) => {
+$('#addModal form').on('submit', (e) => {
 	e.preventDefault();
-	let name = $('#add_student #name').val();
-	let age = $('#add_student #age').val();
-	let sex = $('#add_student #sex').val();
-	let phone = $('#add_student #phone').val();
-	let birthday = $('#add_student #birthday').val();
+	let name = $('#addModal form #student_name').val();
+	let age = $('#addModal form #student_age').val();
+	let sex = $('#addModal form #student_sex').val();
+	let phone = $('#addModal form #student_phone').val();
+	let _token = $('#addModal form #student__token').val();
+	let data = JSON.stringify({student: {name, age, sex, phone, _token}});
 	$.ajax({
-		url: '/ajax/student.php',
+		url: '/add',
 		type: 'POST',
-		data: {name, age, sex, phone, birthday, type: 'addStudent'},
+		dataType: 'json',
+		contentType: 'application/json',
+		data: data,
 		success: (response) => {
-			response = JSON.parse(response);
-			if (response['student']) {
-				$('.students-table tbody').prepend(`
-					<tr>
-						<td>${response['student'].name}</td>
-						<td>${response['student'].age}</td>
-						<td>${response['student'].sex}</td>
-						<td>
-							<button class="btn btn-danger removeStudent" type="button" data-id="${response['student'].id}">Delete</button>
-						</td>
-						<td>
-							<button class="btn btn-warning" data-toggle="modal" data-target="#">Edit</button>
-						</td>
-						<td><button class="btn btn-primary openPage" data-id="${response['student'].id}">Page</button></td>
-						<td><button class="btn btn-success openTeachers" data-id="${response['student'].id}">Teachers</button></td>
-					</tr>
-				`);
-				$('#addModal').modal('hide');
-				showSuccessAlert('Student added successfuly! :)');
-			} else {
-				showDangerAlert(response['error']);
-			}
+			$('.students-table tbody').prepend(`
+				<tr>
+					<td>${response['student'].name}</td>
+					<td>${response['student'].age}</td>
+					<td>${response['student'].sex}</td>
+					<td>
+						<button class="btn btn-danger removeStudent" type="button" data-id="${response['student'].id}">Delete</button>
+					</td>
+					<td>
+						<button class="btn btn-warning" data-toggle="modal" data-target="#">Edit</button>
+					</td>
+					<td><button class="btn btn-primary openPage" data-id="${response['student'].id}">Page</button></td>
+					<td><button class="btn btn-success openTeachers" data-id="${response['student'].id}">Teachers</button></td>
+				</tr>
+			`);
+			$('#addModal').modal('hide');
+			showSuccessAlert('Student added successfuly! :)');
+		},
+		error: err => {
+			let error = err.responseJSON.error.info.children[0].errors[0].message;
+			showDangerAlert(error);
 		}
 	})
 });

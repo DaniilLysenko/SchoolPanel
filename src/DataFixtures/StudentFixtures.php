@@ -12,11 +12,11 @@ class StudentFixtures extends Fixture
     {
  		for ($i = 1; $i <= 20; $i++) {
             $student = new student();
-            $student->setName('Test User '.$i);
+            $student->setName('Test User');
             $student->setSex(mt_rand(0, 1));
             $student->setAge(mt_rand(6, 17));
             $student->setPhone('phone');
-            $student->setAvatar('web/img/avatar/default.jpg');
+            $student->setAvatar('web/img/avatar/def.jpg');
             $manager->persist($student);
         }
 

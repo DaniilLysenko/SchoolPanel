@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
@@ -17,27 +18,37 @@ class Student
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=100)
+     * @Assert\Length(min = 5,max = 100, minMessage="Name should be more than {{ limit }} characters")
+     * @Assert\NotBlank(message="Name can not be blank")
      */
     private $name;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\Length(min = 1, max = 2)
+     * @Assert\Type(
+     *     type="integer",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $age;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=10)
+     * @Assert\Choice({"man", "woman"}, message="Choice valid sex type")
+     * @Assert\NotBlank()
      */
     private $sex;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Regex("/[0-9]/", message="Your phone can contain only numbers")
      */
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=200, nullable=true, options={"default": "web/img/def.jpg"}))
      */
     private $avatar;
 
@@ -70,12 +81,12 @@ class Student
         return $this;
     }
 
-    public function getSex(): ?int
+    public function getSex(): ?string
     {
         return $this->sex;
     }
 
-    public function setSex(int $sex): self
+    public function setSex(string $sex): self
     {
         $this->sex = $sex;
 
