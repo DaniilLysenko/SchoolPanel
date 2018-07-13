@@ -10,9 +10,10 @@ class StudentFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+        $names = ['Den', 'Andrii', 'Ivan', 'Vasyl', 'Olesya', 'Vika'];
  		for ($i = 1; $i <= 20; $i++) {
             $student = new Student();
-            $student->setName('Test User');
+            $student->setName($names[mt_rand(0,5)].' User');
             $student->setSex(mt_rand(0, 1));
             $student->setAge(mt_rand(6, 17));
             $student->setPhone('phone');

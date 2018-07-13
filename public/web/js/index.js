@@ -103,6 +103,7 @@ $('#editModal form').on('submit', function(e) {
     			showDangerAlert(response.responseJSON.errors);
     		} else {
     			showSuccessAlert("You\'ve updated image succefully");
+    			$('#editModal').modal('hide');
     		}
     	}
 	});
@@ -153,12 +154,14 @@ $('#teachersModal').on('click', '.kill', function() {
 	let tid = $(this).attr('data-t-id');
 	let sid = $(this).attr('data-s-id');
 	$.ajax({
-		url: '/ajax/teacher.php',
+		url: '/removeTeacher/'+sid+'/'+tid,
 		type: 'POST',
-		data: {tid, sid, type: 'removeTeacher'},
-		success: (response) => {
-			$('.teacher'+tid).remove();
-			showSuccessAlert('Teacher removed successfuly! :)');
+		complete: response => {
+			console.log(response);
+			if (!response.responseJSON.errors) {
+				$('.teacher'+tid).remove();
+				showSuccessAlert(response.responseJSON.success);
+			}
 		}
 	});
 });
@@ -190,16 +193,18 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 
 $('#searchStudent #query').on('keyup', (e) => {
 	let q = $('#searchStudent #query').val();
-	if (q === "") $('.search-table').hide(); 
+	if (q === "") {
+		$('.students-table .searchBody').hide();
+		$('.students-table .currentBody').show();
+		$('.navigation').show();	
+	} 
 	$.ajax({
-		url: '/ajax/student.php',
-		type: 'POST',
-		data: {q, type: 'searchStudent'},
+		url: '/search/'+q,
+		type: 'GET',
 		success: (response) => {
-			response = JSON.parse(response);
-			$('.search-table tbody').empty();
-			response['result'].forEach(student => {
-				$('.search-table tbody').append(`
+			$('.students-table .searchBody').empty();
+			response['students'].forEach(student => {
+				$('.students-table .searchBody').append(`
 				<tr class="st_col${student.id}">
 					<td>${student.name}</td>
 					<td>${student.age}</td>
@@ -219,7 +224,11 @@ $('#searchStudent #query').on('keyup', (e) => {
 				</tr>
 				`);	
 			});
-			if (response['result'].length > 0) $('.search-table').show();
+			if (response['students'].length > 0) {
+				$('.students-table .currentBody').hide();
+				$('.navigation').hide();
+				$('.students-table .searchBody').show();
+			}
 		},
 		error: (error) => {
 			console.log(error);

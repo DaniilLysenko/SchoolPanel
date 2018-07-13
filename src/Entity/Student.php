@@ -136,6 +136,13 @@ class Student
         $this->studentTeachers[] = $teacher;
     }
 
+    public function removeStudentTeacher(Teacher $teacher)
+    {
+        if ($this->studentTeachers->contains($teacher)) {
+            $this->studentTeachers->removeElement($teacher);
+        }
+    }
+
     /**
      * @return ArrayCollection|User[]
      */

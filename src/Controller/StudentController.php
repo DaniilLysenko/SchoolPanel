@@ -22,18 +22,14 @@ class StudentController extends Controller
      */
     public function index($page = 1)
     {
-    	$repository = $this->getDoctrine()->getRepository(Student::class);
+    	$rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
         $editForm = $this->createForm(EditType::class);
 
-        $students = $repository->findBy([], ['id' => 'DESC']);
+        $students = $rep->findBy([], ['id' => 'DESC']);
 
         $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $students,
-            $page,
-            3
-        );
+        $pagination = $paginator->paginate($students,$page,3);
 
         return $this->render('student/index.html.twig', [
             'pagination' => $pagination,
@@ -71,8 +67,8 @@ class StudentController extends Controller
      */
     public function addTeacher(Request $request, $sid)
     {
-        $tid = $request->get('tid');
         $result = [];
+        $tid = $request->get('tid');
         $student = $this->getDoctrine()->getRepository(Student::class)->find($sid);
         for ($i = 0; $i < count($tid); $i++) {
             $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($tid[$i]);
@@ -83,5 +79,38 @@ class StudentController extends Controller
         $this->getDoctrine()->getManager()->persist($student);
         $this->getDoctrine()->getManager()->flush();
         return new JsonResponse($this->get("serializer")->normalize(['teacher' => $result]), 200);
+    }
+
+    /**
+     * @Route("/removeTeacher/{sid}/{tid}", name="removeTeacher")
+     * @Method({"POST"})
+     */
+    public function removeTeacher($sid, $tid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $student = $em->getRepository(Student::class)->find($sid);
+        if (!$student) {
+            return new JsonResponse(['errors' => "Student not found"], 400);
+        }
+        $teacher = $em->getRepository(Teacher::class)->find($tid);
+        if (!$teacher) {
+            return new JsonResponse(['errors' => "Teacher not found"], 400);
+        }        
+
+        $student->removeStudentTeacher($teacher);
+        
+        $em->persist($student);
+        $em->flush();
+        return new JsonResponse(['success' => "Teacher removed successfuly"], 200);
+    }
+
+    /**
+     * @Route("/search/{query}", name="searchStudent")
+     */
+    public function search($query)
+    {
+        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
+        $students = $rep->studentSearch($query);
+        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);
     }
 }

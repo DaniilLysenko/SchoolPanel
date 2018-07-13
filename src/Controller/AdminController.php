@@ -105,16 +105,4 @@ class AdminController extends JsonController
         }            
         return new JsonResponse(['errors' => 'Submit error'], 400);
     }
-
-    /**
-     * @Route("/teacher", name="addTeacher"),
-     * @Method({"POST"})
-     */
-    public function addTeacher($id)
-    {
-        $student = $this->getDoctrine()->getRepository(Student::class)->find($request->get('sid'));
-        $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($request->get('tid'));
-        $student->addStudentTeacher($teacher);
-        return new JsonResponse(['success' => "You added new teacher"], 200); 
-    }
 }
