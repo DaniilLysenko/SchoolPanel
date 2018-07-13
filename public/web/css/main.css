@@ -41,6 +41,15 @@ body {
   margin: 0 20px;
   animation: spin 2s linear infinite;
 }
+.loader-st {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 0 20px;
+  animation: spin 1s linear infinite;
+}
 .search-table {
   display: none;
 }
@@ -48,6 +57,13 @@ body {
   display: none;
 }
 .searchBody {
+  display: none;
+}
+.show-more {
+  display: flex;
+  justify-content: center;
+}
+.show-more * {
   display: none;
 }
 @keyframes spin {

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Student;
+use App\Models\SearchModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,42 +20,13 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
-//    /**
-//     * @return Student[] Returns an array of Student objects
-//     */
-    /*
-    public function findByExampleField($value)
+    public function studentSearch(SearchModel $search, $offset)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Student
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-
-    public function studentSearch($q)
-    {
-        $qb = $this->createQueryBuilder('s')
             ->select('s.id', 's.sex', 's.name', 's.age')
             ->where('s.name LIKE :q')
-            ->setParameter(':q', '%'.$q.'%');
-        $query = $qb->getQuery();
-        return $query->getResult();
+            ->setFirstResult($offset)
+            ->setMaxResults(5)
+            ->setParameter('q', '%'.$search->getName().'%')->getQuery()->getResult();
     }
 }

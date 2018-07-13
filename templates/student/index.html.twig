@@ -16,11 +16,13 @@
 				<h2>Students</h2><hr>
 				<button class="btn btn-warning" data-toggle="modal" data-target="#addModal">Add Student</button>
 				<hr>
-				<form id="searchStudent">
+				<!-- <form id="searchStudent">
 		          <div class="form-group">
 		            <input type="text" class="form-control" id="query" placeholder="Text student name" autocomplete="off">
 		          </div>
-		        </form>
+		        </form> -->
+		        {% form_theme searchForm 'bootstrap_4_layout.html.twig' %}
+        		{{ form(searchForm) }}
 		        <hr>
 				<div class="table-st">
 					<table class="table students-table table-responsive">
@@ -61,7 +63,11 @@
 					<div class="navigation">
 					    {{ knp_pagination_render(pagination, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
 					</div>
-			        <br><hr>
+				</div>
+				<div class="show-more">
+					<input type="hidden" value="" id="q">
+					<button class="btn btn-warning">Show more</button>
+					<div class="loader-st"></div>
 				</div>
 			</div>
 			<div class="col-sm-4">

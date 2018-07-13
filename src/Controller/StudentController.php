@@ -11,8 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use App\Entity\Student;
 use App\Entity\Teacher;
+use App\Models\SearchModel;
 
 use App\Forms\StudentType;
+use App\Forms\SearchStudentType;
 use App\Forms\EditType;
 
 class StudentController extends Controller
@@ -25,6 +27,7 @@ class StudentController extends Controller
     	$rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
         $editForm = $this->createForm(EditType::class);
+        $searchForm = $this->createForm(SearchStudentType::class);
 
         $students = $rep->findBy([], ['id' => 'DESC']);
 
@@ -34,7 +37,8 @@ class StudentController extends Controller
         return $this->render('student/index.html.twig', [
             'pagination' => $pagination,
             'addForm' => $addForm->createView(),
-            'editForm' => $editForm->createView()
+            'editForm' => $editForm->createView(),
+            'searchForm' => $searchForm->createView()
         ]);
     }
 
@@ -105,12 +109,30 @@ class StudentController extends Controller
     }
 
     /**
-     * @Route("/search/{query}", name="searchStudent")
+     * @Route("/search", name="searchStudent")
+     * @Method({"POST"})
      */
-    public function search($query)
+    public function search(Request $request)
     {
+        $search = new SearchModel();
+        $offset = 0;
+        $form = $this->createForm(SearchStudentType::class, $search);
+        $form->handleRequest($request);
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
-        $students = $rep->studentSearch($query);
+        $students = $rep->studentSearch($search, $offset);
+        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);  
+    }
+
+    /**
+     * @Route("/search/{name}/{offset}", name="searchMoreStudent")
+     */
+    public function searchMore($name, $offset)
+    {
+        sleep(1);
+        $search = new SearchModel();
+        $search->setName($name);
+        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
+        $students = $rep->studentSearch($search, $offset);
         return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);
     }
 }
