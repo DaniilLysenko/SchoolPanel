@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StudentRepository")
@@ -48,9 +49,19 @@ class Student
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=200, nullable=true, options={"default": "web/img/def.jpg"}))
+     * @ORM\Column(type="string", length=200, nullable=true, options={"default": "/web/img/avatars/def.jpg"}))
      */
     private $avatar;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Teacher")
+     */
+    private $studentTeachers;
+
+    public function __construct()
+    {
+        $this->studentTeachers = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -115,5 +126,21 @@ class Student
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    public function addStudentTeacher(Teacher $teacher)
+    {
+        if ($this->studentTeachers->contains($teacher)) {
+            return;
+        }
+        $this->studentTeachers[] = $teacher;
+    }
+
+    /**
+     * @return ArrayCollection|User[]
+     */
+    public function getStudentTeacher()
+    {
+        return $this->studentTeachers;
     }
 }

@@ -29,7 +29,7 @@
 				    </tr>
 				  </thead>
 				  <tbody>
-				  	{% for student in students %}
+				  	{% for student in pagination %}
 				  		<tr class="st_col{{ student.id }}">
 							<td>{{ student.name }}</td>
 							<td>{{ student.age }}</td>
@@ -50,6 +50,10 @@
 				  	{% endfor %}
 				  </tbody>
 				</table>
+				<div class="navigation">
+
+				    {{ knp_pagination_render(pagination, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+				</div>
 		        <br><hr>
 			</div>
 			<div class="col-sm-4">

@@ -11,12 +11,12 @@ class StudentFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
  		for ($i = 1; $i <= 20; $i++) {
-            $student = new student();
+            $student = new Student();
             $student->setName('Test User');
             $student->setSex(mt_rand(0, 1));
             $student->setAge(mt_rand(6, 17));
             $student->setPhone('phone');
-            $student->setAvatar('web/img/avatar/def.jpg');
+            $student->setAvatar('/web/img/avatars/def.jpg');
             $manager->persist($student);
         }
 

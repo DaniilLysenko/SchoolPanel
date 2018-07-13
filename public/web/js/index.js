@@ -41,16 +41,14 @@ $('#addModal form').on('submit', (e) => {
 $('.students-table').on('click', '.openPage', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
-		url: '/ajax/student.php',
-		type: 'POST',
-		data: {id, type: 'singleStudent'},
+		url: '/single/'+id,
+		type: 'GET',
 		beforeSend: () => {
 			$('#studentModal .modal-body').empty();
 			$('#studentModal .modal-body').append('<div class="loader"></div>');
 			$('#studentModal').modal('show');
 		},
 		success: (response) => {
-			response = JSON.parse(response);
 			$('#studentModal .modal-title').text("");
 			$('#studentModal .modal-body').empty();
 			$('#studentModal .modal-title').text(response['student'].name);
@@ -58,10 +56,10 @@ $('.students-table').on('click', '.openPage', function() {
 				<div class="panel panel-default">
 		          <ul class="list-group">
 		            <li class="list-group-item active"><strong>Name: </strong>${response['student'].name}</li>
-		            <li class="list-group-item"><img style="width: 100%;" src="${response['student'].image}"></li>
+		            <li class="list-group-item"><img style="width: 100%;" src="${response['student'].avatar}"></li>
 		            <li class="list-group-item"><strong>Sex: </strong>${response['student'].sex}</li>
 		            <li class="list-group-item"><strong>Age: </strong>${response['student'].age}</li>
-		            <li class="list-group-item"><strong>Phone number: </strong>${response['student'].birthday}</li>
+		            <li class="list-group-item"><strong>Phone number: </strong>${response['student'].phone}</li>
 		          </ul>
 		        </div>
 			`);
@@ -110,32 +108,14 @@ $('#editModal form').on('submit', function(e) {
 	});
 });
 
-
 $('.students-table').on('click', '.openTeachers', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
-		url: '/ajax/teacher.php',
-		type: 'POST',
-		data: {id, type: 'studentTeachers'},
+		url: '/allTeachers/'+id,
+		type: 'GET',
 		success: (response) => {
-			response = JSON.parse(response);
-			$('#teachersModal .modal-body').empty();
-			$('#teachersModal .modal-body').append(`
-	        <div class="teachers">
-	          <table class="table">
-	            <thead>
-	              <tr>
-	                <th scope="col">Name</th>
-	                <th scope="col">Course</th>
-	                <th scope="col">Kill</th>
-	              </tr>
-	            </thead>
-	            <tbody>
-	            </tbody>
-	          </table>
-	        </div>
-	        <br><hr><br>
-			`);
+			$('#teachersModal .modal-body .teachers tbody').empty();
+			$('#teachersModal .modal-body .add_teacher').empty();
 			response['teachers'].forEach(teacher => {
 				$('#teachersModal .teachers tbody').append(`
 				<tr class="teacher${teacher.id}">
@@ -147,19 +127,17 @@ $('.students-table').on('click', '.openTeachers', function() {
                 </tr>
 				`);
 			});
-			$('#teachersModal .modal-body').append(`
-				<div class="add_teacher">
-				  <h4>Choose teacher you want right now!</h4>
-				  <form id="addTeacher">
-				    <div class="form-group">
-				      <label for="sel">Select teacher:</label>
-				      <select class="form-control" id="sel" name="teacher"></select>
-				    </div>
-				    <input type="hidden" value="${id}" id="stid">
-				    <button class="btn btn-warning" type="submit" clas="choose">Choose</button>
-				  </form>
-				  <br><br>
-				</div>
+			$('#teachersModal .modal-body .add_teacher').append(`
+			  <h4>Choose teacher you want right now!</h4>
+			  <form id="addTeacher">
+			    <div class="form-group">
+			      <label for="sel">Select teacher:</label>
+			      <select class="form-control" id="sel" name="teacher" multiple></select>
+			    </div>
+			    <input type="hidden" value="${id}" id="stid">
+			    <button class="btn btn-warning" type="submit" clas="choose">Choose</button>
+			  </form>
+			  <br><br>
 			`);
 			response['allTeachers'].forEach(teacher => {
 				$('.add_teacher select').append(`
@@ -190,21 +168,22 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 	let stid = $('#addTeacher #stid').val();
 	let tid = $('#addTeacher #sel').val();
 	$.ajax({
-		url: '/ajax/teacher.php',
+		url: '/addTeacher/'+stid,
 		type: 'POST',
-		data: {stid, tid, type: 'addTeacher'},
+		data: {tid},
 		success: (response) => {
-			response = JSON.parse(response);
-			$('#teachersModal .teachers tbody').append(`
-			<tr class="teacher${response['teacher'].id}">
-              <th scope="row">${response['teacher'].name}</th>
-              <td>${response['teacher'].course}</td>
-              <td>
-                <button class="btn btn-danger kill" type="button" data-t-id="${response['teacher'].id}" data-s-id="${stid}">Kill</button>
-              </td>
-            </tr>
-			`);
-			showSuccessAlert('Teacher added successfuly! :)');			
+			response['teacher'].forEach(teacher => {
+				$('#teachersModal .teachers tbody').append(`
+				<tr class="teacher${teacher.id}">
+	              <th scope="row">${teacher.name}</th>
+	              <td>${teacher.course}</td>
+	              <td>
+	                <button class="btn btn-danger kill" type="button" data-t-id="${teacher.id}" data-s-id="${stid}">Kill</button>
+	              </td>
+	            </tr>
+				`);
+			});
+			showSuccessAlert('Teachers added successfuly! :)');			
 		}
 	});
 });

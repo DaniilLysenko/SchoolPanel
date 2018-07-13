@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Student;
@@ -23,9 +22,7 @@ class AdminController extends JsonController
      */
     public function index()
     {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController'
-        ]);
+        return $this->render('admin/index.html.twig');
     }
 
     /**
@@ -96,7 +93,7 @@ class AdminController extends JsonController
 
                 $file->move($this->getParameter('avatars_directory'), $fileName);
                 $student = $this->getDoctrine()->getRepository(Student::class)->find($form->get('id')->getData()); 
-                $student->setAvatar('web/img/avatars/'.$fileName);
+                $student->setAvatar('/web/img/avatars/'.$fileName);
                 
 
                 $this->getDoctrine()->getManager()->persist($student);
@@ -107,5 +104,17 @@ class AdminController extends JsonController
             return new JsonResponse(['errors' => 'Invalid image'], 400);
         }            
         return new JsonResponse(['errors' => 'Submit error'], 400);
+    }
+
+    /**
+     * @Route("/teacher", name="addTeacher"),
+     * @Method({"POST"})
+     */
+    public function addTeacher($id)
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($request->get('sid'));
+        $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($request->get('tid'));
+        $student->addStudentTeacher($teacher);
+        return new JsonResponse(['success' => "You added new teacher"], 200); 
     }
 }
