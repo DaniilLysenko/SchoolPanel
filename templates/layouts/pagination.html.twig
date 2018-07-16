@@ -1,9 +1,9 @@
 <table class="table students-table table-responsive">
     <thead>
         <tr>
-          <th scope="col col_sort col_name">Name</th>
-          <th scope="col col_sort col_age">Age</th>
-          <th scope="col col_sort col_sex">Sex</th>
+          <th scope="col col_name" {% if pagination.isSorted('s.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Name', 's.name') }}</th>
+          <th scope="col col_age" {% if pagination.isSorted('s.age') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Age', 's.age') }}</th>
+          <th scope="col col_sex">Sex</th>
           <th scope="col">Delete</th>
           <th scope="col">Edit</th>
           <th scope="col">Page</th>

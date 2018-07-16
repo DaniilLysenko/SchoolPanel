@@ -193,94 +193,19 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 
 $('#search_student #search_student_name').on('keyup', (e) => {
 	let q = $('#search_student_name').val();
+	if (q == "") q = " ";
 	$.ajax({
 		url: '/search',
 		type: 'POST',
 		data: {search_student: {'name': q, '_token': $('#search_student__token').val()}},
 		success: (response) => {
-			console.log(response);
 			$('.table-st').html(response.students);
-			// $('.students-table .searchBody').empty();
-			// response['students'].forEach(student => {
-			// 	$('.students-table .searchBody').append(`
-			// 	<tr class="st_col${student.id}">
-			// 		<td>${student.name}</td>
-			// 		<td>${student.age}</td>
-			// 		<td>${student.sex}</td>
-			// 		<td>
-			// 			<button class="btn btn-danger removeStudent" type="button" data-id="${student.id}">Delete</button>
-			// 		</td>
-			// 		<td>
-			// 			<button class="btn btn-warning editInfo" data-toggle="modal" data-id="${student.id}" data-name="${student.name}">Edit</button>
-			// 		</td>
-			// 		<td>
-			// 			<button class="btn btn-primary openPage" data-id="${student.id}">Page</button>
-			// 		</td>
-			// 		<td>
-			// 			<button class="btn btn-success openTeachers" data-id="${student.id}">Teachers</button>
-			// 		</td>
-			// 	</tr>
-			// 	`);	
-			// });
-			// $('.show-more input').val(q);
-			// if (response['students'].length > 0) {
-			// 	$('.students-table .currentBody').hide();
-			// 	$('.navigation').hide();
-			// 	$('.students-table .searchBody').show();
-			// 	$('.show-more button').show();
-			// 	$('.show-more button').attr('data-off',5);
-			// }
 		},
 		error: (error) => {
 			console.log(error);
 		}
 	});
 });
-
-$('.container').on('click', '.show-more button', function() {
-	let offset = $(this).attr('data-off');
-	let q = $('.show-more input').val();
-	$.ajax({
-		url: '/search/'+q+'/'+offset,
-		type: 'GET',
-		beforeSend: function() {
-			$('.show-more button').hide();
-			$('.show-more .loader-st').show();
-		},
-		success: (response) => {
-			$('.show-more input').val(q);
-			if (response['students'].length > 0) {
-				$('.show-more button').show();
-				$('.show-more .loader-st').hide();
-				response['students'].forEach(student => {
-					$('.students-table .searchBody').append(`
-					<tr class="st_col${student.id}">
-						<td>${student.name}</td>
-						<td>${student.age}</td>
-						<td>${student.sex}</td>
-						<td>
-							<button class="btn btn-danger removeStudent" type="button" data-id="${student.id}">Delete</button>
-						</td>
-						<td>
-							<button class="btn btn-warning editInfo" data-toggle="modal" data-id="${student.id}" data-name="${student.name}">Edit</button>
-						</td>
-						<td>
-							<button class="btn btn-primary openPage" data-id="${student.id}">Page</button>
-						</td>
-						<td>
-							<button class="btn btn-success openTeachers" data-id="${student.id}">Teachers</button>
-						</td>
-					</tr>
-					`);	
-				});
-				let currentOff = parseInt($('.show-more button').attr('data-off')) + 5;
-				$('.show-more button').attr('data-off', currentOff);
-			} else {
-				$('.show-more > div').hide();
-			}
-		},
-	});
-});	
 
 function hideSuccessAlert()
 {

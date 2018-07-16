@@ -25,6 +25,12 @@ class StudentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->select('s.id', 's.sex', 's.name', 's.age')
             ->where('s.name LIKE :q')
-            ->setParameter('q', '%'.$search->getName().'%')->getQuery()->getResult();
+            ->setParameter('q', '%'.$search->getName().'%');
+    }
+
+    public function studentFind()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('s.id', 's.sex', 's.name', 's.age');
     }
 }

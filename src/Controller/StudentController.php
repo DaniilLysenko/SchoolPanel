@@ -22,14 +22,13 @@ class StudentController extends Controller
     /**
      * @Route("/school/{page}", name="studentList")
      */
-    public function index($page = 1)
+    public function index(Request $request, $page = 1)
     {
     	$rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
         $editForm = $this->createForm(EditType::class);
         $searchForm = $this->createForm(SearchStudentType::class);
-
-        $students = $rep->findBy([], ['id' => 'DESC']);
+        $students = $rep->studentFind();
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate($students, $page, 3);
@@ -118,7 +117,12 @@ class StudentController extends Controller
         $form = $this->createForm(SearchStudentType::class, $search);
         $form->handleRequest($request);
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
-        $students = $rep->studentSearch($search);
+
+        if (trim($form->get('name')->getData()) == "") {
+            $students = $rep->findBy([], ['id' => 'DESC']);
+        } else {
+            $students = $rep->studentSearch($search);
+        }
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate($students, $page, 3);
@@ -126,17 +130,16 @@ class StudentController extends Controller
         $pagination->setUsedRoute('search');
         $pagination->setParam('query', $form->get('name')->getData());
 
-        return new JsonResponse(['students' => $this->renderView('layouts/pagination.html.twig',['pagination' => $pagination])]); 
+        return new JsonResponse(['students' => $this->renderView('layouts/pagination.html.twig',['pagination' => $pagination, 'sort' => 'search/'.$form->get('name')->getData().'?sort='])]); 
     }
 
     /**
-     * @Route("/search/{query}", name="search")
+     * @Route("/search/{query}/{page}", name="search")
      * @Method({"GET"})
      */
-    public function searchPag(Request $request, $query)
+    public function searchPag(Request $request, $query, $page = 1)
     {
-        $page = $request->get('page');
-        $rep = $this->getDoctrine()->getRepository(Student::class);
+        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
         $editForm = $this->createForm(EditType::class);
         $searchForm = $this->createForm(SearchStudentType::class);
@@ -144,33 +147,20 @@ class StudentController extends Controller
         $search = new SearchModel();
         $search->setName($query);
 
-        $students = $rep->studentSearch($search);
+        $students = $rep->studentSearch($search, $request->get('sort'));
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate($students, $page, 3);
 
         $pagination->setUsedRoute('search');
         $pagination->setParam('query', $query);
-
+        $pagination->setParam('page', $page);
 
         return $this->render('student/index.html.twig', [
             'pagination' => $pagination,
             'addForm' => $addForm->createView(),
             'editForm' => $editForm->createView(),
-            'searchForm' => $searchForm->createView()
+            'searchForm' => $searchForm->createView(),
         ]);        
-    }
-
-    /**
-     * @Route("/search/{name}/{offset}", name="searchMoreStudent")
-     */
-    public function searchMore($name, $offset)
-    {
-        sleep(1);
-        $search = new SearchModel();
-        $search->setName($name);
-        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
-        $students = $rep->studentSearch($search, $offset);
-        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);
     }
 }
