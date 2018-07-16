@@ -32,7 +32,7 @@ class StudentController extends Controller
         $students = $rep->findBy([], ['id' => 'DESC']);
 
         $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate($students,$page,3);
+        $pagination = $paginator->paginate($students, $page, 3);
 
         return $this->render('student/index.html.twig', [
             'pagination' => $pagination,
@@ -112,15 +112,53 @@ class StudentController extends Controller
      * @Route("/search", name="searchStudent")
      * @Method({"POST"})
      */
-    public function search(Request $request)
+    public function search(Request $request, $page = 1)
     {
         $search = new SearchModel();
-        $offset = 0;
         $form = $this->createForm(SearchStudentType::class, $search);
         $form->handleRequest($request);
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
-        $students = $rep->studentSearch($search, $offset);
-        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);  
+        $students = $rep->studentSearch($search);
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($students, $page, 3);
+
+        $pagination->setUsedRoute('search');
+        $pagination->setParam('query', $form->get('name')->getData());
+
+        return new JsonResponse(['students' => $this->renderView('layouts/pagination.html.twig',['pagination' => $pagination])]); 
+    }
+
+    /**
+     * @Route("/search/{query}", name="search")
+     * @Method({"GET"})
+     */
+    public function searchPag(Request $request, $query)
+    {
+        $page = $request->get('page');
+        $rep = $this->getDoctrine()->getRepository(Student::class);
+        $addForm = $this->createForm(StudentType::class);
+        $editForm = $this->createForm(EditType::class);
+        $searchForm = $this->createForm(SearchStudentType::class);
+
+        $search = new SearchModel();
+        $search->setName($query);
+
+        $students = $rep->studentSearch($search);
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($students, $page, 3);
+
+        $pagination->setUsedRoute('search');
+        $pagination->setParam('query', $query);
+
+
+        return $this->render('student/index.html.twig', [
+            'pagination' => $pagination,
+            'addForm' => $addForm->createView(),
+            'editForm' => $editForm->createView(),
+            'searchForm' => $searchForm->createView()
+        ]);        
     }
 
     /**

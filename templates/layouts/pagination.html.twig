@@ -1,0 +1,37 @@
+<table class="table students-table table-responsive">
+    <thead>
+        <tr>
+          <th scope="col col_sort col_name">Name</th>
+          <th scope="col col_sort col_age">Age</th>
+          <th scope="col col_sort col_sex">Sex</th>
+          <th scope="col">Delete</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Page</th>
+          <th scope="col">Teachers</th>
+        </tr>
+    </thead>
+    <tbody class="currentBody">
+    {% for student in pagination %}
+        <tr class="st_col{{ student.id }}">
+            <td>{{ student.name }}</td>
+            <td>{{ student.age }}</td>
+            <td>{% if (student.sex) %} man {% else %} woman {% endif %}</td>
+            <td>
+                <button class="btn btn-danger removeStudent" type="button" data-id="{{ student.id }}">Delete</button>
+            </td>
+            <td>
+                <button class="btn btn-warning editInfo" data-toggle="modal" data-id="{{ student.id }}" data-name="{{ student.name }}">Edit</button>
+            </td>
+            <td>
+                <button class="btn btn-primary openPage" data-id="{{ student.id }}">Page</button>
+            </td>
+            <td>
+                <button class="btn btn-success openTeachers" data-id="{{ student.id }}">Teachers</button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="navigation">
+    {{ knp_pagination_render(pagination, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+</div>

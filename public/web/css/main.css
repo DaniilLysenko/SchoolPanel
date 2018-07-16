@@ -66,6 +66,9 @@ body {
 .show-more * {
   display: none;
 }
+.col_sort {
+  cursor: pointer;
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);

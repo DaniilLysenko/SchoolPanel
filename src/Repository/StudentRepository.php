@@ -20,13 +20,11 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
-    public function studentSearch(SearchModel $search, $offset)
+    public function studentSearch(SearchModel $search)
     {
         return $this->createQueryBuilder('s')
             ->select('s.id', 's.sex', 's.name', 's.age')
             ->where('s.name LIKE :q')
-            ->setFirstResult($offset)
-            ->setMaxResults(5)
             ->setParameter('q', '%'.$search->getName().'%')->getQuery()->getResult();
     }
 }
