@@ -57,7 +57,7 @@ $('.students-table').on('click', '.openPage', function() {
 		          <ul class="list-group">
 		            <li class="list-group-item active"><strong>Name: </strong>${response['student'].name}</li>
 		            <li class="list-group-item"><img style="width: 100%;" src="${response['student'].avatar}"></li>
-		            <li class="list-group-item"><strong>Sex: </strong>${response['student'].sex}</li>
+		            <li class="list-group-item"><strong>Sex: </strong>${response['student'].sex === 1 ? 'man' : 'woman'}</li>
 		            <li class="list-group-item"><strong>Age: </strong>${response['student'].age}</li>
 		            <li class="list-group-item"><strong>Phone number: </strong>${response['student'].phone}</li>
 		          </ul>
@@ -193,7 +193,7 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 
 $('#search_student #search_student_name').on('keyup', (e) => {
 	let q = $('#search_student_name').val();
-	if (q == "") q = " ";
+	console.log(q);
 	$.ajax({
 		url: '/search',
 		type: 'POST',

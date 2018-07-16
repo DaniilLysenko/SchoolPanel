@@ -119,7 +119,7 @@ class StudentController extends Controller
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
 
         if (trim($form->get('name')->getData()) == "") {
-            $students = $rep->findBy([], ['id' => 'DESC']);
+            $students = $rep->studentFind();
         } else {
             $students = $rep->studentSearch($search);
         }
@@ -127,9 +127,11 @@ class StudentController extends Controller
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate($students, $page, 3);
 
-        $pagination->setUsedRoute('search');
-        $pagination->setParam('query', $form->get('name')->getData());
 
+        if ($form->get('name')->getData() != ""){
+            $pagination->setUsedRoute('search');
+            $pagination->setParam('query', $form->get('name')->getData());
+        }
         return new JsonResponse(['students' => $this->renderView('layouts/pagination.html.twig',['pagination' => $pagination, 'sort' => 'search/'.$form->get('name')->getData().'?sort='])]); 
     }
 
