@@ -16,5 +16,4 @@ yarn-error.log
 /assets/
 
 *.iml
-.idea
-out
+/.idea/
