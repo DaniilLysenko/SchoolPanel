@@ -8,8 +8,8 @@
 
 ###> symfony/webpack-encore-pack ###
 /node_modules/
-/assets/
-/.idea/
+assets/*
+.idea/*
 /public/build/
 npm-debug.log
 yarn-error.log
