@@ -38,12 +38,13 @@ $('#addModal form').on('submit', (e) => {
 	})
 });
 
-$('.students-table').on('click', '.openPage', function() {
+$('.table-st').on('click', '.openPage', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
 		url: '/single/'+id,
 		type: 'GET',
 		beforeSend: () => {
+			$('#studentModal .modal-title').empty();
 			$('#studentModal .modal-body').empty();
 			$('#studentModal .modal-body').append('<div class="loader"></div>');
 			$('#studentModal').modal('show');
@@ -67,7 +68,7 @@ $('.students-table').on('click', '.openPage', function() {
 	});
 });	
 
-$('.students-table').on('click', '.removeStudent', function() {
+$('.table-st').on('click', '.removeStudent', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
 		url: '/remove',
@@ -82,7 +83,7 @@ $('.students-table').on('click', '.removeStudent', function() {
 	});
 });
 
-$('.table').on('click', '.editInfo', function() {
+$('.table-st').on('click', '.editInfo', function() {
 	$('#editModal .modal-title').text('Edit ' + $(this).attr('data-name') + ' info');
 	$('#editModal form #edit_id').val($(this).attr('data-id'));
 	$('#editModal').modal();
@@ -109,7 +110,7 @@ $('#editModal form').on('submit', function(e) {
 	});
 });
 
-$('.students-table').on('click', '.openTeachers', function() {
+$('.table-st').on('click', '.openTeachers', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
 		url: '/allTeachers/'+id,
@@ -193,7 +194,6 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 
 $('#search_student #search_student_name').on('keyup', (e) => {
 	let q = $('#search_student_name').val();
-	console.log(q);
 	$.ajax({
 		url: '/search',
 		type: 'POST',
@@ -206,6 +206,20 @@ $('#search_student #search_student_name').on('keyup', (e) => {
 		}
 	});
 });
+
+$('.table-st').on('click', 'a', function(e) {
+	e.preventDefault();
+	let href = $(this).attr('href');
+	$.ajax({
+		url: href,
+		type: 'GET',
+		success: response => {
+			console.log(response);
+			$('.table-st').html(response.form);
+		}
+	});
+});
+
 
 function hideSuccessAlert()
 {

@@ -33,6 +33,12 @@ class StudentController extends Controller
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate($students, $page, 3);
 
+        if ($request->isXmlHttpRequest()) {
+        	return new JsonResponse(['form' =>$this->renderView('layouts/pagination.html.twig', [
+            	'pagination' => $pagination,
+        	])]); 
+        }
+
         return $this->render('student/index.html.twig', [
             'pagination' => $pagination,
             'addForm' => $addForm->createView(),
@@ -127,6 +133,7 @@ class StudentController extends Controller
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate($students, $page, 3);
 
+        $pagination->setUsedRoute('studentList');
 
         if ($form->get('name')->getData() != ""){
             $pagination->setUsedRoute('search');
@@ -142,9 +149,6 @@ class StudentController extends Controller
     public function searchPag(Request $request, $query, $page = 1)
     {
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
-        $addForm = $this->createForm(StudentType::class);
-        $editForm = $this->createForm(EditType::class);
-        $searchForm = $this->createForm(SearchStudentType::class);
 
         $search = new SearchModel();
         $search->setName($query);
@@ -158,11 +162,8 @@ class StudentController extends Controller
         $pagination->setParam('query', $query);
         $pagination->setParam('page', $page);
 
-        return $this->render('student/index.html.twig', [
+        return new JsonResponse(['form' =>$this->renderView('layouts/pagination.html.twig', [
             'pagination' => $pagination,
-            'addForm' => $addForm->createView(),
-            'editForm' => $editForm->createView(),
-            'searchForm' => $searchForm->createView(),
-        ]);        
+        ])]);        
     }
 }
