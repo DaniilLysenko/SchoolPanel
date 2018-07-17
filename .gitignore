@@ -13,7 +13,5 @@ yarn-error.log
 
 /.web-server-pid
 
-/assets/
-
 *.iml
 /.idea/
