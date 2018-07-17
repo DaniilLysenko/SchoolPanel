@@ -79,4 +79,18 @@ class ApiController extends JsonController
             'student' => $student
         ]), 200);
     }
+
+    /**
+     * @Route("/api/teachers/{id}", name="studentTeachers")
+     * @Method({"POST"})
+     */
+    public function studentTeachersAction($id)
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
+        if ($student) {
+            $teachers = $student->getStudentTeacher();
+            return new JsonResponse($this->get("serializer")->normalize(['teachers' => $teachers]), 200);
+        }
+        return new JsonResponse(['errors' => ['Student not found']], 400);
+    }
 }
