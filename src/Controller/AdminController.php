@@ -17,12 +17,11 @@ use App\Forms\StudentType;
 use App\Forms\EditType;
 use App\Forms\AdminType;
 
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 class AdminController extends JsonController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/login", name="login")
+     * @Method({"GET"})
      */
     public function index()
     {
@@ -50,7 +49,7 @@ class AdminController extends JsonController
      * @Route("/remove", name="remove")
      * @Method({"POST"})
      */
-    public function remove(Request $request)
+    public function removeAction(Request $request)
     {
         if (!is_null($request->get('id'))) {
             $student = $this->getDoctrine()->getRepository(Student::class)->find($request->get('id'));
@@ -68,7 +67,7 @@ class AdminController extends JsonController
      * @Route("/edit", name="edit"),
      * @Method({"POST"})
      */
-    public function edit(Request $request)
+    public function editAction(Request $request)
     {
         $student = new Student();
         $form = $this->createForm(EditType::class, $student);

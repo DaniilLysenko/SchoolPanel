@@ -12,18 +12,21 @@
         {% block modals %} {% endblock %}
         
         <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-            <a class="navbar-brand" href="/school">School Panel</a>
+            <a class="navbar-brand" href="/">School Panel</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Login <span class="sr-only">(current)</span></a>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/school">School<span></a>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login <span class="sr-only">(current)</span></a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

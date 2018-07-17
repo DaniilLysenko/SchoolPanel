@@ -22,7 +22,7 @@ class StudentController extends Controller
     /**
      * @Route("/school/{page}", name="studentList")
      */
-    public function index(Request $request, $page = 1)
+    public function studentListAction(Request $request, $page = 1)
     {
     	$rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
@@ -38,6 +38,23 @@ class StudentController extends Controller
             	'pagination' => $pagination,
         	])]); 
         }
+    }
+
+    /**
+     * @Route("/", name="index")
+     */
+    public function index(Request $request, $page = 1)
+    {
+        $rep = $this->getDoctrine()->getRepository(Student::class);
+        $addForm = $this->createForm(StudentType::class);
+        $editForm = $this->createForm(EditType::class);
+        $searchForm = $this->createForm(SearchStudentType::class);
+        $students = $rep->studentFind();
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($students, $page, 3);
+
+        $pagination->setUsedRoute('studentList');
 
         return $this->render('student/index.html.twig', [
             'pagination' => $pagination,

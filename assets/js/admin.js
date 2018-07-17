@@ -8,14 +8,12 @@ $('#signIn').on('submit', (e) => {
 		type: 'POST',
 		data: {_username, _password, _token},
 		success: (response) => {
-			console.log(response);
-			if (response.error) {
-				$('.alert-error').show();
-				$('.alert-error').empty();
-				$('.alert-error').text(response.error);
-			} else {
-				// document.location.href = '/school';
-			}
+			document.location.href = '/';
+		},
+		error: err => {
+            $('.alert-error').show();
+            $('.alert-error').empty();
+            $('.alert-error').text(err);
 		}
 	})
 });

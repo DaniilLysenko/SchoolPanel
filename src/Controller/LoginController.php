@@ -19,19 +19,20 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class LoginController extends Controller
 {
     /**
-     * @Route("/login", name="login")
+     * @Route("/login", name="loginAction")
      * @Method({"POST"})
      */
-    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils, SerializerInterface $serializer)
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
     {
         $error = $authenticationUtils->getLastAuthenticationError();
-        return new JsonResponse($this->get("serializer")->normalize(['error' => $error->getMessage()]), 200);
+        return new JsonResponse($this->get("serializer")->normalize(['error' => $error->getMessage()]), 404);
+
     }
 
     /**
      * @Route("/logout", name="logout")
      */
-    public function logout()
+    public function logoutAction()
     {
 
     }
