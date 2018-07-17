@@ -13,12 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EditType extends AbstractType
+class UploadImageType extends AbstractType
 {
 	public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->setAction('/edit')
             ->add('avatar', FileType::class)
             ->add('id', HiddenType::class,['mapped' => false])
             ->add('upload', SubmitType::class, ['attr' => ['class' => 'btn-success']]);

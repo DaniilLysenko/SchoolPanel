@@ -49,7 +49,7 @@ class Student
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=200, nullable=true, options={"default": "/web/img/avatars/def.jpg"}))
+     * @ORM\Column(type="string", length=200, options={"default" = "/web/img/avatars/def.jpg"}))
      */
     private $avatar;
 

@@ -15,7 +15,7 @@ use App\Models\SearchModel;
 
 use App\Forms\StudentType;
 use App\Forms\SearchStudentType;
-use App\Forms\EditType;
+use App\Forms\UploadImageType;
 
 class StudentController extends Controller
 {
@@ -26,7 +26,7 @@ class StudentController extends Controller
     {
     	$rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
-        $editForm = $this->createForm(EditType::class);
+        $editForm = $this->createForm(UploadImageType::class);
         $searchForm = $this->createForm(SearchStudentType::class);
         $students = $rep->studentFind();
 
@@ -47,7 +47,7 @@ class StudentController extends Controller
     {
         $rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
-        $editForm = $this->createForm(EditType::class);
+        $editForm = $this->createForm(UploadImageType::class);
         $searchForm = $this->createForm(SearchStudentType::class);
         $students = $rep->studentFind();
 

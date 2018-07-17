@@ -26,10 +26,13 @@ class StudentType extends AbstractType
 	        ->add('save', SubmitType::class, ['attr' => ['class' => 'btn-success']]);
     }
 
+    // Dont forget to activate csrf
+
 	public function configureOptions(OptionsResolver $resolver)
 	{
 	    $resolver->setDefaults(array(
-	        'data_class' => Student::class
+	        'data_class' => Student::class,
+            'csrf_protection' => false
 	    ));
 	}
 }

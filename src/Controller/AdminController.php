@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Student;
 use App\Entity\Admin;
 use App\Forms\StudentType;
-use App\Forms\EditType;
+use App\Forms\UploadImageType;
 use App\Forms\AdminType;
 
 class AdminController extends JsonController
@@ -37,6 +37,7 @@ class AdminController extends JsonController
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
         $this->handleJsonForm($form, $request);
+        $student->setAvatar("/web/img/avatars/def.jpg");
         $this->getDoctrine()->getManager()->persist($student);
         $this->getDoctrine()->getManager()->flush();
 
@@ -70,7 +71,7 @@ class AdminController extends JsonController
     public function editAction(Request $request)
     {
         $student = new Student();
-        $form = $this->createForm(EditType::class, $student);
+        $form = $this->createForm(UploadImageType::class, $student);
         $form->handleRequest($request);
         $mime = ['jpeg', 'png'];
         if ($form->isSubmitted()) {

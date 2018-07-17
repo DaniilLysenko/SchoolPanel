@@ -5,7 +5,8 @@ $('#addModal form').on('submit', (e) => {
 	let sex = $('#addModal form #student_sex').val();
 	let phone = $('#addModal form #student_phone').val();
 	let _token = $('#addModal form #student__token').val();
-	let data = JSON.stringify({student: {name, age, sex, phone, _token}});
+	// let data = JSON.stringify({student: {name, age, sex, phone, _token}});
+    let data = JSON.stringify({student: {name, age, sex, phone}});
 	$.ajax({
 		url: '/add',
 		type: 'POST',
@@ -85,7 +86,7 @@ $('.table-st').on('click', '.removeStudent', function() {
 
 $('.table-st').on('click', '.editInfo', function() {
 	$('#editModal .modal-title').text('Edit ' + $(this).attr('data-name') + ' info');
-	$('#editModal form #edit_id').val($(this).attr('data-id'));
+	$('#editModal form #upload_image_id').val($(this).attr('data-id'));
 	$('#editModal').modal();
 });
 
@@ -158,7 +159,6 @@ $('#teachersModal').on('click', '.kill', function() {
 		url: '/removeTeacher/'+sid+'/'+tid,
 		type: 'POST',
 		complete: response => {
-			console.log(response);
 			if (!response.responseJSON.errors) {
 				$('.teacher'+tid).remove();
 				showSuccessAlert(response.responseJSON.success);
@@ -214,7 +214,6 @@ $('.table-st').on('click', 'a', function(e) {
 		url: href,
 		type: 'GET',
 		success: response => {
-			console.log(response);
 			$('.table-st').html(response.form);
 		}
 	});
