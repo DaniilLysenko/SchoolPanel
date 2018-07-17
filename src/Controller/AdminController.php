@@ -12,33 +12,21 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Student;
+use App\Entity\Admin;
 use App\Forms\StudentType;
 use App\Forms\EditType;
+use App\Forms\AdminType;
+
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends JsonController
 {
     /**
-     * @Route("/", name="login")
+     * @Route("/", name="index")
      */
     public function index()
     {
         return $this->render('admin/index.html.twig');
-    }
-
-    /**
-     * @Route("/login")
-     * @Method({"POST"})
-     */
-    public function login()
-    {
-    	if (isset($_POST['login']) && isset($_POST['password'])) {
-    		if ($_POST['login'] === 'admin' && $_POST['password'] === 'admin') {
-    			return new JsonResponse(["status" => 200]);
-    		} else {
-    			return new JsonResponse(["error" => "Data is incorrect"]);
-    		}
-    	}
-    	return new JsonResponse(["error" => "Data is missing"]);
     }
 
     /**

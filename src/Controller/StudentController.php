@@ -74,7 +74,7 @@ class StudentController extends Controller
      * @Route("/addTeacher/{sid}", name="addTeacher")
      * @Method({"POST"})
      */
-    public function addTeacher(Request $request, $sid)
+    public function addTeacherAction(Request $request, $sid)
     {
         $result = [];
         $tid = $request->get('tid');
@@ -94,7 +94,7 @@ class StudentController extends Controller
      * @Route("/removeTeacher/{sid}/{tid}", name="removeTeacher")
      * @Method({"POST"})
      */
-    public function removeTeacher($sid, $tid)
+    public function removeTeacherAction($sid, $tid)
     {
         $em = $this->getDoctrine()->getManager();
         $student = $em->getRepository(Student::class)->find($sid);
@@ -117,7 +117,7 @@ class StudentController extends Controller
      * @Route("/search", name="searchStudent")
      * @Method({"POST"})
      */
-    public function search(Request $request, $page = 1)
+    public function searchAction(Request $request, $page = 1)
     {
         $search = new SearchModel();
         $form = $this->createForm(SearchStudentType::class, $search);
