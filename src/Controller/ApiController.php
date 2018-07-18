@@ -117,6 +117,8 @@ class ApiController extends JsonController
         $teachers = $data['teachers'];
         $student_id = $data['student_id'];
 
+        $result = [];
+
         $student = $this->getDoctrine()->getRepository(Student::class)->find($student_id);
 
         if ($student) {
@@ -124,13 +126,14 @@ class ApiController extends JsonController
                 $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($teacher);
                 if ($teacher) {
                     $student->addStudentTeacher($teacher);
+                    $result[] = $teacher;
                 } else {
                     return new JsonResponse(['errors' => ['Teacher not found']], 400);
                 }
             }
             $this->getDoctrine()->getManager()->persist($student);
             $this->getDoctrine()->getManager()->flush();
-            return new JsonResponse(['success' => ['Teachers added succefully']], 200);
+            return new JsonResponse($this->get("serializer")->normalize(['teacher' => $result]), 200);
         }
         return new JsonResponse(['errors' => ['Student not found']], 400);
     }

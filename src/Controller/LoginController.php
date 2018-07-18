@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
-
 use App\Entity\Admin;
 use App\Forms\AdminType;
 

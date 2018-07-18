@@ -88,13 +88,14 @@ class StudentController extends Controller
     }
 
     /**
-     * @Route("/addTeacher/{sid}", name="addTeacher")
+     * @Route("/addTeacher", name="addTeacher")
      * @Method({"POST"})
      */
-    public function addTeacherAction(Request $request, $sid)
+    public function addTeacherAction(Request $request)
     {
         $result = [];
         $tid = $request->get('tid');
+        $sid = $request->get('sid');
         $student = $this->getDoctrine()->getRepository(Student::class)->find($sid);
         for ($i = 0; $i < count($tid); $i++) {
             $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($tid[$i]);
@@ -109,7 +110,7 @@ class StudentController extends Controller
 
     /**
      * @Route("/removeTeacher/{sid}/{tid}", name="removeTeacher")
-     * @Method({"POST"})
+     * @Method({"GET"})
      */
     public function removeTeacherAction($sid, $tid)
     {

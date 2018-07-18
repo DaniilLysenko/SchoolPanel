@@ -47,21 +47,18 @@ class AdminController extends JsonController
     }
 
     /**
-     * @Route("/remove", name="remove")
-     * @Method({"POST"})
+     * @Route("/remove/{id}", name="remove")
+     * @Method({"GET"})
      */
-    public function removeAction(Request $request)
+    public function removeAction($id)
     {
-        if (!is_null($request->get('id'))) {
-            $student = $this->getDoctrine()->getRepository(Student::class)->find($request->get('id'));
-            if ($student) {
-                $this->getDoctrine()->getManager()->remove($student);
-                $this->getDoctrine()->getManager()->flush();
-                return new JsonResponse(["success" => "OK"]);
-            }
-            return new JsonResponse(["errors" => ["Student not found"]], 400);
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($id);
+        if ($student) {
+            $this->getDoctrine()->getManager()->remove($student);
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(["success" => "OK"]);
         }
-        return new JsonResponse(["errors" => ["Data is missing"]], 400);
+        return new JsonResponse(["errors" => ["Student not found"]], 400);
     }
 
     /**

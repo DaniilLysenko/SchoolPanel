@@ -71,9 +71,8 @@ $('.table-st').on('click', '.openPage', function() {
 $('.table-st').on('click', '.removeStudent', function() {
 	let id = $(this).attr('data-id');
 	$.ajax({
-		url: '/remove',
-		type: 'POST',
-		data: {id},
+		url: '/remove/'+id,
+		type: 'GET',
 		complete: response => {
 			if (!response.responseJSON.errors) {
 				$('.st_col'+id).remove();
@@ -156,7 +155,7 @@ $('#teachersModal').on('click', '.kill', function() {
 	let sid = $(this).attr('data-s-id');
 	$.ajax({
 		url: '/removeTeacher/'+sid+'/'+tid,
-		type: 'POST',
+		type: 'GET',
 		complete: response => {
 			if (!response.responseJSON.errors) {
 				$('.teacher'+tid).remove();
@@ -168,12 +167,13 @@ $('#teachersModal').on('click', '.kill', function() {
 
 $('#teachersModal').on('submit', '#addTeacher', (e) => {
 	e.preventDefault();
-	let stid = $('#addTeacher #stid').val();
-	let tid = $('#addTeacher #sel').val();
+	let student_id = $('#addTeacher #stid').val();
+	let teachers = $('#addTeacher #sel').val();
+	let data = JSON.stringify({teachers, student_id});
 	$.ajax({
-		url: '/addTeacher/'+stid,
+		url: '/api/teachers/add',
 		type: 'POST',
-		data: {tid},
+		data: data,
 		success: (response) => {
 			response['teacher'].forEach(teacher => {
 				$('#teachersModal .teachers tbody').append(`
@@ -181,7 +181,7 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 	              <th scope="row">${teacher.name}</th>
 	              <td>${teacher.course}</td>
 	              <td>
-	                <button class="btn btn-danger kill" type="button" data-t-id="${teacher.id}" data-s-id="${stid}">Kill</button>
+	                <button class="btn btn-danger kill" type="button" data-t-id="${teacher.id}" data-s-id="${student_id}">Kill</button>
 	              </td>
 	            </tr>
 				`);
