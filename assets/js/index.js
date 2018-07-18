@@ -5,8 +5,7 @@ $('#addModal form').on('submit', (e) => {
 	let sex = $('#addModal form #student_sex').val();
 	let phone = $('#addModal form #student_phone').val();
 	let _token = $('#addModal form #student__token').val();
-	// let data = JSON.stringify({student: {name, age, sex, phone, _token}});
-    let data = JSON.stringify({student: {name, age, sex, phone}});
+	let data = JSON.stringify({student: {name, age, sex, phone, _token}});
 	$.ajax({
 		url: '/add',
 		type: 'POST',

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 // Entities
 use App\Entity\Student;
+use App\Entity\Teacher;
 // Forms
 use App\Forms\StudentType;
 
@@ -81,7 +82,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/teachers/{id}", name="studentTeachers")
+     * @Route("/api/studentTeachers/{id}", name="studentTeachers")
      * @Method({"POST"})
      */
     public function studentTeachersAction($id)
@@ -92,5 +93,68 @@ class ApiController extends JsonController
             return new JsonResponse($this->get("serializer")->normalize(['teachers' => $teachers]), 200);
         }
         return new JsonResponse(['errors' => ['Student not found']], 400);
+    }
+
+    /**
+     * @Route("/api/teachers", name="allTeachers")
+     * @Method({"GET"})
+     */
+    public function teachersAction()
+    {
+        $teachers = $this->getDoctrine()->getRepository(Teacher::class)->findAll();
+        return new JsonResponse($this->get("serializer")->normalize(['teachers' => $teachers]), 200);
+    }
+
+    /**
+     * @Route("/api/teachers/add", name="addStudentTeacher")
+     * @Method({"POST"})
+     */
+    public function addStudentTeacherAction(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+
+        $teachers = $data['teachers'];
+        $student_id = $data['student_id'];
+
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($student_id);
+
+        if ($student) {
+            foreach ($teachers as $teacher) {
+                $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($teacher);
+                if ($teacher) {
+                    $student->addStudentTeacher($teacher);
+                } else {
+                    return new JsonResponse(['errors' => ['Teacher not found']], 400);
+                }
+            }
+            $this->getDoctrine()->getManager()->persist($student);
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(['success' => ['Teachers added succefully']], 200);
+        }
+        return new JsonResponse(['errors' => ['Student not found']], 400);
+    }
+
+    /**
+     * @Route("/api/teachers/remove/{sid}/{tid}", name="removeStudentTeacher")
+     * @Method({"GET"})
+     */
+    public function removeStudentTeacherAction($tid, $sid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $student = $em->getRepository(Student::class)->find($sid);
+        if (!$student) {
+            return new JsonResponse(['errors' => 'Student not found'], 400);
+        }
+        $teacher = $em->getRepository(Teacher::class)->find($tid);
+        if (!$teacher) {
+            return new JsonResponse(['errors' => 'Teacher not found'], 400);
+        }        
+
+        $student->removeStudentTeacher($teacher);
+        
+        $em->persist($student);
+        $em->flush();
+        return new JsonResponse(['success' => "Teacher removed successfuly"], 200);
     }
 }
