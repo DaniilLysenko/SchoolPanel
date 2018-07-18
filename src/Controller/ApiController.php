@@ -12,6 +12,9 @@ use App\Entity\Student;
 use App\Entity\Teacher;
 // Forms
 use App\Forms\StudentType;
+use App\Forms\SearchStudentType;
+// Models
+use App\Models\SearchModel;
 
 class ApiController extends JsonController
 {
@@ -159,5 +162,21 @@ class ApiController extends JsonController
         $em->persist($student);
         $em->flush();
         return new JsonResponse(['success' => "Teacher removed successfuly"], 200);
+    }
+
+    /**
+     * @Route("/api/search", name="studentApiSearch")
+     * @Method({"POST"})
+     */
+    public function searchAction(Request $request)
+    {
+        $search = new SearchModel();
+        $form = $this->createForm(SearchStudentType::class, $search);
+        $this->handleJsonForm($form, $request);
+        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
+
+        $students = $rep->studentSearch($search)->getQuery()->getResult();
+
+        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200); 
     }
 }
