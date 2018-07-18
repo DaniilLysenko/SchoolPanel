@@ -193,10 +193,11 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 
 $('#search_student #search_student_name').on('keyup', (e) => {
 	let q = $('#search_student_name').val();
+	let data = JSON.stringify({search_student: {'name': q, '_token': $('#search_student__token').val()}})
 	$.ajax({
 		url: '/search',
 		type: 'POST',
-		data: {search_student: {'name': q, '_token': $('#search_student__token').val()}},
+		data: data,
 		success: (response) => {
 			$('.table-st').html(response.students);
 		},

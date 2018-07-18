@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Mcfedr\JsonFormBundle\Controller\JsonController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use App\Entity\Student;
@@ -17,7 +18,7 @@ use App\Forms\StudentType;
 use App\Forms\SearchStudentType;
 use App\Forms\UploadImageType;
 
-class StudentController extends Controller
+class StudentController extends JsonController
 {
     /**
      * @Route("/school/{page}", name="studentList")
@@ -139,7 +140,7 @@ class StudentController extends Controller
     {
         $search = new SearchModel();
         $form = $this->createForm(SearchStudentType::class, $search);
-        $form->handleRequest($request);
+        $this->handleJsonForm($form, $request);
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
 
         if (trim($form->get('name')->getData()) == "") {
