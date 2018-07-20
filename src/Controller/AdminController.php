@@ -19,6 +19,7 @@ use App\Forms\AdminType;
 
 class AdminController extends JsonController
 {
+
     /**
      * @Route("/login", name="login")
      * @Method({"GET"})
@@ -26,11 +27,6 @@ class AdminController extends JsonController
     public function index()
     {
         return $this->render('admin/index.html.twig');
-    }
-
-    public function FunctionName($value='')
-    {
-    	# code...
     }
 
     /**
