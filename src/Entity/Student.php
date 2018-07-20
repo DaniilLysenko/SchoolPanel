@@ -51,7 +51,7 @@ class Student
     /**
      * @ORM\Column(type="string", length=200, options={"default" = "/web/img/avatars/def.jpg"}))
      */
-    private $avatar;
+    private $avatar = "/web/img/avatars/def.jpg";
 
     /**
      * @ORM\ManyToMany(targetEntity="Teacher")

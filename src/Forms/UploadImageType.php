@@ -18,8 +18,8 @@ class UploadImageType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('avatar', FileType::class)
-            ->add('id', HiddenType::class,['mapped' => false])
+            ->add('avatar', FileType::class, ['mapped' => false])
+            ->add('id', HiddenType::class, ['mapped' => false])
             ->add('upload', SubmitType::class, ['attr' => ['class' => 'btn-success']]);
     }
 

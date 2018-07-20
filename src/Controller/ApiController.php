@@ -27,7 +27,7 @@ class ApiController extends JsonController
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
         $this->handleJsonForm($form, $request);
-        $student->setAvatar("/web/img/avatars/def.jpg");
+        // $student->setAvatar("/web/img/avatars/def.jpg");
         $this->getDoctrine()->getManager()->persist($student);
         $this->getDoctrine()->getManager()->flush();
         return new JsonResponse($this->get("serializer")->normalize([
