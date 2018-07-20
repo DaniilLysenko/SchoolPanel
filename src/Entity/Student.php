@@ -54,7 +54,7 @@ class Student
     private $avatar = "/web/img/avatars/def.jpg";
 
     /**
-     * @ORM\ManyToMany(targetEntity="Teacher")
+     * @ORM\ManyToMany(targetEntity="Teacher", inversedBy="teacherStudents")
      */
     private $studentTeachers;
 
@@ -144,7 +144,7 @@ class Student
     }
 
     /**
-     * @return ArrayCollection|User[]
+     * @return ArrayCollection|Teacher[]
      */
     public function getStudentTeacher()
     {

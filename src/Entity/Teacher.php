@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TeacherRepository")
@@ -30,6 +31,16 @@ class Teacher
      * @Assert\NotBlank(message="Course can not be blank")
      */
     private $course;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Student", mappedBy="studentTeachers")
+     */
+    private $teacherStudents;
+
+    public function __construct()
+    {
+        $this->teacherStudents = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -58,5 +69,13 @@ class Teacher
         $this->course = $course;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Student[]
+     */
+    public function getTeacherStudent()
+    {
+        return $this->teacherStudents;
     }
 }
