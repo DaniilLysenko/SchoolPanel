@@ -28,6 +28,11 @@ class AdminController extends JsonController
         return $this->render('admin/index.html.twig');
     }
 
+    public function FunctionName($value='')
+    {
+    	# code...
+    }
+
     /**
      * @Route("/add", name="add")
      * @Method({"POST"})

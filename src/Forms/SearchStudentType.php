@@ -24,8 +24,7 @@ class SearchStudentType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 	    $resolver->setDefaults(array(
-	        'data_class' => SearchModel::class,
-	        'csrf_protection'   => false
+	        'data_class' => SearchModel::class
 	    ));
 	}
 }
