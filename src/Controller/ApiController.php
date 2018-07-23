@@ -18,6 +18,8 @@ use App\Models\SearchModel;
 
 class ApiController extends JsonController
 {
+    private $sort = 's.id';
+    private $direction = 'desc';
     /**
      * @Route("/api/add", name="addStudent")
      * @Method({"POST"})
@@ -164,6 +166,21 @@ class ApiController extends JsonController
     }
 
     /**
+     * @Route("/api/school/{page}")
+     * @Method({"GET"})
+     */
+    public function schoolPaginateAction(Request $request, $page = 1)
+    {
+        if ($request->query->get('sort') !== NULL) $this->sort = $request->query->get('sort');
+        if ($request->query->get('direction') !== NULL) $this->direction = $request->query->get('direction');
+
+        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
+        $students = $rep->studentOrder($this->sort, $this->direction, $page, 3);
+
+        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);
+    }
+
+    /**
      * @Route("/api/search", name="studentApiSearch")
      * @Method({"POST"})
      */
@@ -177,5 +194,20 @@ class ApiController extends JsonController
         $students = $rep->studentSearch($search)->getQuery()->getResult();
 
         return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200); 
+    }
+
+    /**
+     * @Route("/api/search/{query}/{page}")
+     * @Method({"GET"})
+     */
+    public function searchPaginateAction(Request $request, $query, $page = 1)
+    {
+        if ($request->query->get('sort') !== NULL) $this->sort = $request->query->get('sort');
+        if ($request->query->get('direction') !== NULL) $this->direction = $request->query->get('direction');
+
+        $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
+        $students = $rep->studentOrderSearch($query, $this->sort, $this->direction, $page, 3);
+
+        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);
     }
 }

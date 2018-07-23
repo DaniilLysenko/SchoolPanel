@@ -27,6 +27,18 @@ class StudentRepository extends ServiceEntityRepository
             ->where('s.name LIKE :q')
             ->setParameter('q', '%'.$search->getName().'%');
     }
+    
+    public function studentOrderSearch($search, $sort, $direction, $page, $perPage)
+    {
+        $offset = $page * $perPage;
+        return $this->createQueryBuilder('s')
+            ->select('s.id', 's.sex', 's.name', 's.age')
+            ->where('s.name LIKE :q')
+            ->orderBy($sort, $direction)
+            ->setFirstResult($offset)
+            ->setMaxResults($perPage)
+            ->setParameter('q', '%'.$search.'%')->getQuery()->getResult();
+    }
 
     public function studentFind()
     {
