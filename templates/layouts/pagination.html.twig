@@ -1,14 +1,14 @@
 <table class="table students-table table-responsive">
     <thead>
-        <tr>
-          <th scope="col col_name" {% if pagination.isSorted('s.name') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Name', 's.name') }}</th>
-          <th scope="col col_age" {% if pagination.isSorted('s.age') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Age', 's.age') }}</th>
-          <th scope="col col_sex">Sex</th>
-          <th scope="col">Delete</th>
-          <th scope="col">Edit</th>
-          <th scope="col">Page</th>
-          <th scope="col">Teachers</th>
-        </tr>
+    <tr>
+        <th scope="col col_name" class="col-link-name"><a class="col-link" href="/school/1?sort=s.name&direction=desc">Name</a></th>
+        <th scope="col col_age" class="col-link-age"><a class="col-link" href="/school/1?sort=s.age&direction=desc">Age</a></th>
+        <th scope="col col_sex">Sex</th>
+        <th scope="col">Delete</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Page</th>
+        <th scope="col">Teachers</th>
+    </tr>
     </thead>
     <tbody class="currentBody">
     {% for student in pagination %}
@@ -32,6 +32,23 @@
     {% endfor %}
     </tbody>
 </table>
+
 <div class="navigation">
-    {{ knp_pagination_render(pagination, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+    <nav>
+        <ul class="pagination">
+            <li class="page-item prev">
+                <a class="page-link" href="/school/{% if page > 1 %}{{ page - 1 }}{% else %}{{ page }}{% endif %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% for i in 1..count %}
+                <li class="page-item pg{{ i }} {% if i == page %} {{ "active" }} {% endif %}"><a class="page-link" href="/school/{{ i }}">{{ i }}</a></li>
+            {% endfor %}
+            <li class="page-item">
+                <a class="page-link" href="/school/{% if page + 1 > count %}{{ page }}{% else %}{{ page + 1 }}{% endif %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>

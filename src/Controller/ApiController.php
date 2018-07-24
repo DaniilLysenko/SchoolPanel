@@ -156,7 +156,7 @@ class ApiController extends JsonController
         $teacher = $em->getRepository(Teacher::class)->find($tid);
         if (!$teacher) {
             return new JsonResponse(['errors' => 'Teacher not found'], 400);
-        }        
+        }
 
         $student->removeStudentTeacher($teacher);
         
@@ -171,8 +171,12 @@ class ApiController extends JsonController
      */
     public function schoolPaginateAction(Request $request, $page = 1)
     {
-        if ($request->query->get('sort') !== NULL) $this->sort = $request->query->get('sort');
-        if ($request->query->get('direction') !== NULL) $this->direction = $request->query->get('direction');
+        if ($request->query->get('sort') !== null) {
+            $this->sort = $request->query->get('sort');
+        }
+        if ($request->query->get('direction') !== null) {
+            $this->direction = $request->query->get('direction');
+        }
 
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
         $students = $rep->studentOrder($this->sort, $this->direction, $page, 3);
@@ -193,7 +197,7 @@ class ApiController extends JsonController
 
         $students = $rep->studentSearch($search)->getQuery()->getResult();
 
-        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200); 
+        return new JsonResponse($this->get("serializer")->normalize(['students' => $students]), 200);
     }
 
     /**
@@ -202,8 +206,12 @@ class ApiController extends JsonController
      */
     public function searchPaginateAction(Request $request, $query, $page = 1)
     {
-        if ($request->query->get('sort') !== NULL) $this->sort = $request->query->get('sort');
-        if ($request->query->get('direction') !== NULL) $this->direction = $request->query->get('direction');
+        if ($request->query->get('sort') !== null) {
+            $this->sort = $request->query->get('sort');
+        }
+        if ($request->query->get('direction') !== null) {
+            $this->direction = $request->query->get('direction');
+        }
 
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
         $students = $rep->studentOrderSearch($query, $this->sort, $this->direction, $page, 3);

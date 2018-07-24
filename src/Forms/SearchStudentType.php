@@ -13,18 +13,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchStudentType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['required' => false, 'label' => false, 'attr' => 
-            	['autocomplete' => 'off', 'placeholder' => 'Text student name']
+            ->add('name', TextType::class, ['required' => false, 'label' => false, 'attr' =>
+                ['autocomplete' => 'off', 'placeholder' => 'Text student name']
             ]);
     }
 
-	public function configureOptions(OptionsResolver $resolver)
-	{
-	    $resolver->setDefaults(array(
-	        'data_class' => SearchModel::class
-	    ));
-	}
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => SearchModel::class
+        ));
+    }
 }

@@ -25,7 +25,6 @@ class LoginController extends Controller
     {
         $error = $authenticationUtils->getLastAuthenticationError();
         return new JsonResponse($this->get("serializer")->normalize(['error' => $error->getMessage()]), 404);
-
     }
 
     /**
@@ -33,6 +32,5 @@ class LoginController extends Controller
      */
     public function logoutAction()
     {
-
     }
 }

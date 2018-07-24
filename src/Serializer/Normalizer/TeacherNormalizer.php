@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Serializer\Normalizer;
+
 use App\Entity\Student;
 use App\Entity\Teacher;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

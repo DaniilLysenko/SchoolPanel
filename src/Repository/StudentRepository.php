@@ -25,24 +25,43 @@ class StudentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('s')
             ->select('s.id', 's.sex', 's.name', 's.age')
             ->where('s.name LIKE :q')
-            ->setParameter('q', '%'.$search->getName().'%');
+            ->setParameter('q', '%'.$search->getName().'%')
+            ->getQuery()->getResult();
     }
-    
-    public function studentOrderSearch($search, $sort, $direction, $page, $perPage)
+
+    public function studentOrderSearch(SearchModel $search, $sort, $direction, $page, $perPage)
     {
-        $offset = $page * $perPage;
+        $offset = $page > 1 ? (($page - 1) * $perPage) : 0;
         return $this->createQueryBuilder('s')
             ->select('s.id', 's.sex', 's.name', 's.age')
             ->where('s.name LIKE :q')
             ->orderBy($sort, $direction)
             ->setFirstResult($offset)
             ->setMaxResults($perPage)
-            ->setParameter('q', '%'.$search.'%')->getQuery()->getResult();
+            ->setParameter('q', '%'.$search->getName().'%')->getQuery()->getResult();
+    }
+
+    public function studentOrder($sort, $direction, $page, $perPage)
+    {
+        $offset = $page * $perPage;
+        return $this->createQueryBuilder('s')
+            ->select('s.id', 's.sex', 's.name', 's.age')
+            ->orderBy($sort, $direction)
+            ->setFirstResult($offset)
+            ->setMaxResults($perPage)->getQuery()->getResult();
     }
 
     public function studentFind()
     {
         return $this->createQueryBuilder('s')
-            ->select('s.id', 's.sex', 's.name', 's.age');
+            ->select('s.id', 's.sex', 's.name', 's.age')
+            ->getQuery()->getResult();
+    }
+
+    public function countAllStudents()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->getQuery()->getSingleScalarResult();
     }
 }

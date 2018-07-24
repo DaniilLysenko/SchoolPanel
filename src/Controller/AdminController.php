@@ -78,17 +78,17 @@ class AdminController extends JsonController
                 $fileName = $form->get('id')->getData().'.'.$file->guessExtension();
 
                 $file->move($this->getParameter('avatars_directory'), $fileName);
-                $student = $this->getDoctrine()->getRepository(Student::class)->find($form->get('id')->getData()); 
+                $student = $this->getDoctrine()->getRepository(Student::class)->find($form->get('id')->getData());
                 $student->setAvatar('/web/img/avatars/'.$fileName);
                 
 
                 $this->getDoctrine()->getManager()->persist($student);
                 $this->getDoctrine()->getManager()->flush();
 
-                return new JsonResponse(['success' => true], 200); 
+                return new JsonResponse(['success' => true], 200);
             }
             return new JsonResponse(['errors' => 'Invalid image'], 400);
-        }            
+        }
         return new JsonResponse(['errors' => 'Submit error'], 400);
     }
 }

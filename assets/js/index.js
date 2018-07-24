@@ -191,15 +191,70 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 	});
 });
 
+function generateHTML(response, direction)
+{
+    $('.page-item').removeClass('active');
+    $('.pg'+response.page).addClass('active');
+    $('.col-link-name a').attr('href', response.url + response.page + '?sort=s.name&direction='+direction);
+    $('.col-link-age a').attr('href', response.url + response.page + '?sort=s.age&direction='+direction);
+    $('.table-st tbody').empty();
+    response.students.forEach((student, i) => {
+    	if (i <= 2) {
+            $('.table-st tbody').append(`
+			<tr class="st_col${student.id}">
+				<td>${student.name}</td>
+				<td>${student.age}</td>
+				<td>${student.sex == 1 ? "man" : "woman"}</td>
+				<td>
+					<button class="btn btn-danger removeStudent" type="button" data-id="${student.id}">Delete</button>
+				</td>
+				<td>
+					<button class="btn btn-warning editInfo" data-toggle="modal" data-id="${student.id}" data-name="${student.name}">Edit</button>
+				</td>
+				<td>
+					<button class="btn btn-primary openPage" data-id="${student.id}">Page</button>
+				</td>
+				<td>
+					<button class="btn btn-success openTeachers" data-id="${student.id}">Teachers</button>
+				</td>
+			</tr>
+			`);
+		}
+    });
+}
+
+function generatePagination(url, count, page)
+{
+	$('.pagination').empty();
+	$('.pagination').append(`
+	<li class="page-item prev">
+		<a class="page-link" href="${url}${page > 1 ? page - 1 : page}" aria-label="Previous">
+			<span aria-hidden="true">&laquo;</span>
+		</a>
+	</li>
+	<li class="page-item next">
+		<a class="page-link" href="${url}${page + 1 > 1 ? page : page + 1}" aria-label="Next">
+			<span aria-hidden="true">&raquo;</span>
+		</a>
+	</li>
+	`);
+	for (let i = 1; i <= count; i++) {
+		$('.next').before(`
+		<li class="page-item pg${i} ${i == page ? 'active' : ''}"><a class="page-link" href="${url}${i}">${i}</a
+		`);
+	}
+}
+
 $('#search_student #search_student_name').on('keyup', (e) => {
 	let q = $('#search_student_name').val();
-	let data = JSON.stringify({search_student: {'name': q, '_token': $('#search_student__token').val()}})
+	let data = JSON.stringify({search_student: {'name': q, '_token': $('#search_student__token').val()}});
 	$.ajax({
 		url: '/search',
 		type: 'POST',
 		data: data,
 		success: (response) => {
-			$('.table-st').html(response.students);
+            generateHTML(response);
+            generatePagination('/search/'+q+'/', response.count, response.page);
 		},
 		error: (error) => {
 			console.log(error);
@@ -210,11 +265,27 @@ $('#search_student #search_student_name').on('keyup', (e) => {
 $('.table-st').on('click', 'a', function(e) {
 	e.preventDefault();
 	let href = $(this).attr('href');
+	let direction = 'desc';
+	if ($(this).hasClass('col-link')) {
+		let href = '';
+        let href_split = $(this).attr('href').split('/');
+        href_split = href_split[href_split.length - 1].split('?');
+		let links = document.querySelectorAll('.page-link');
+        let split = $(this).attr('href').split('/');
+        let res = split[split.length - 1].split('?');
+		links.forEach(link => {
+			let page = link.attributes.href.nodeValue.split('/');
+			split[split.length - 1] = page[page.length - 1].split('?')[0] + '?' + res[res.length - 1];
+			link.attributes.href.nodeValue = split.join('/');
+		});
+        direction = href_split[href_split.length - 1].split('&');
+        direction = direction[1].split('=')[1] == 'desc' ? 'asc' : 'desc';
+	}
 	$.ajax({
 		url: href,
 		type: 'GET',
 		success: response => {
-			$('.table-st').html(response.form);
+            generateHTML(response, direction);
 		}
 	});
 });
