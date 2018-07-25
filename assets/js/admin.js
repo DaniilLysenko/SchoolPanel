@@ -8,7 +8,7 @@ $('#signIn').on('submit', (e) => {
 		type: 'POST',
 		data: {_username, _password, _token},
 		success: (response) => {
-			// document.location.href = '/';
+			document.location.href = '/';
 		},
 		error: err => {
             $('.alert-error').show();

@@ -82,7 +82,7 @@ $('.table-st').on('click', '.removeStudent', function() {
 	});
 });
 
-$('.table-st').on('click', '.editInfo', () => {
+$('.table-st').on('click', '.editInfo', function() {
 	$('#editModal .modal-title').text('Edit ' + $(this).attr('data-name') + ' info');
 	$('#editModal form #upload_image_id').val($(this).attr('data-id'));
 	$('#editModal').modal();
@@ -287,7 +287,6 @@ $('.table-st').on('click', 'a', function(e) {
 		}
 	});
 });
-
 
 function hideSuccessAlert() {
 	$('.alert-success').text("");

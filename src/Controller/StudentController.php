@@ -70,6 +70,7 @@ class StudentController extends JsonController
      */
     public function single($id)
     {
+        sleep(1);
         $st = $this->getDoctrine()->getRepository(Student::class)->find($id);
         return new JsonResponse($this->get("serializer")->normalize([
             'student' => $st

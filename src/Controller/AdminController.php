@@ -5,9 +5,13 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+
+// Event handle
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use App\Events\StudentEditEvent;
+use App\Events\StudentEditSubscriber;
 
 use App\Entity\Student;
 use App\Forms\StudentType;
@@ -63,11 +67,15 @@ class AdminController extends JsonController
      */
     public function editAction(Request $request)
     {
+        $dispatcher = new EventDispatcher();
+        $subscriber = new StudentEditSubscriber();
+        $dispatcher->addSubscriber($subscriber);
+
         $student = new Student();
         $form = $this->createForm(UploadImageType::class, $student);
         $form->handleRequest($request);
         $mime = ['jpeg', 'png'];
-        if ($form->isSubmitted()) {
+//        if ($form->isSubmitted()) {
             $file = $form->get('avatar')->getData();
             if (in_array($file->guessExtension(), $mime)) {
                 $fileName = $form->get('id')->getData().'.'.$file->guessExtension();
@@ -75,15 +83,16 @@ class AdminController extends JsonController
                 $file->move($this->getParameter('avatars_directory'), $fileName);
                 $student = $this->getDoctrine()->getRepository(Student::class)->find($form->get('id')->getData());
                 $student->setAvatar('/web/img/avatars/'.$fileName);
-                
 
-                $this->getDoctrine()->getManager()->persist($student);
+                $event = new StudentEditEvent($student);
+                $dispatcher->dispatch(StudentEditEvent::NAME, $event);
+
                 $this->getDoctrine()->getManager()->flush();
 
                 return new JsonResponse(['success' => true], 200);
             }
             return new JsonResponse(['errors' => 'Invalid image'], 400);
-        }
-        return new JsonResponse(['errors' => 'Submit error'], 400);
+//        }
+//        return new JsonResponse(['errors' => 'Submit error'], 400);
     }
 }

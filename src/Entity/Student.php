@@ -58,6 +58,11 @@ class Student
      */
     private $studentTeachers;
 
+    /**
+     * @ORM\Column(type="float", options={"default" = 1.0})
+     */
+    private $version = 1.0;
+
     public function __construct()
     {
         $this->studentTeachers = new ArrayCollection();
@@ -126,6 +131,22 @@ class Student
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @param mixed $version
+     */
+    public function setVersion($version): void
+    {
+        $this->version = $version;
     }
 
     public function addStudentTeacher(Teacher $teacher)

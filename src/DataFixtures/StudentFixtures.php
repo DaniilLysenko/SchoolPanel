@@ -18,6 +18,7 @@ class StudentFixtures extends Fixture
             $student->setAge(mt_rand(6, 17));
             $student->setPhone('phone');
             $student->setAvatar('/web/img/avatars/def.jpg');
+            $student->setVersion(1.0);
             $manager->persist($student);
         }
 
