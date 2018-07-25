@@ -11,10 +11,14 @@
         "build": "encore production"
     },
     "dependencies": {
+        "axios": "^0.18.0",
+        "eslint": "^5.2.0",
         "gulp": "^3.9.1",
         "gulp-concat": "^2.6.1",
         "gulp-less": "^3.5.0",
         "gulp-livereload": "^3.8.1",
-        "gulp-uglifyjs": "^0.6.2"
+        "gulp-uglifyjs": "^0.6.2",
+        "jscs": "^3.0.7",
+        "socket.io-client": "^2.1.1"
     }
 }

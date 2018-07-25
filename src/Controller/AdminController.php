@@ -4,22 +4,17 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Mcfedr\JsonFormBundle\Controller\JsonController;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Student;
-use App\Entity\Admin;
 use App\Forms\StudentType;
 use App\Forms\UploadImageType;
-use App\Forms\AdminType;
 
 class AdminController extends JsonController
 {
-
     /**
      * @Route("/login", name="login")
      * @Method({"GET"})

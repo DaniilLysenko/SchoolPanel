@@ -82,7 +82,7 @@ $('.table-st').on('click', '.removeStudent', function() {
 	});
 });
 
-$('.table-st').on('click', '.editInfo', function() {
+$('.table-st').on('click', '.editInfo', () => {
 	$('#editModal .modal-title').text('Edit ' + $(this).attr('data-name') + ' info');
 	$('#editModal form #upload_image_id').val($(this).attr('data-id'));
 	$('#editModal').modal();
@@ -109,7 +109,7 @@ $('#editModal form').on('submit', function(e) {
 	});
 });
 
-$('.table-st').on('click', '.openTeachers', function() {
+$('.table-st').on('click', '.openTeachers', () => {
 	let id = $(this).attr('data-id');
 	$.ajax({
 		url: '/allTeachers/'+id,
@@ -150,7 +150,7 @@ $('.table-st').on('click', '.openTeachers', function() {
 	});	
 });
 
-$('#teachersModal').on('click', '.kill', function() {
+$('#teachersModal').on('click', '.kill', () => {
 	let tid = $(this).attr('data-t-id');
 	let sid = $(this).attr('data-s-id');
 	$.ajax({
@@ -191,8 +191,7 @@ $('#teachersModal').on('submit', '#addTeacher', (e) => {
 	});
 });
 
-function generateHTML(response, direction)
-{
+function generateHTML(response, direction) {
     $('.page-item').removeClass('active');
     $('.pg'+response.page).addClass('active');
     $('.col-link-name a').attr('href', response.url + response.page + '?sort=s.name&direction='+direction);
@@ -223,8 +222,7 @@ function generateHTML(response, direction)
     });
 }
 
-function generatePagination(url, count, page)
-{
+function generatePagination(url, count, page) {
 	$('.pagination').empty();
 	$('.pagination').append(`
 	<li class="page-item prev">
@@ -291,27 +289,23 @@ $('.table-st').on('click', 'a', function(e) {
 });
 
 
-function hideSuccessAlert()
-{
+function hideSuccessAlert() {
 	$('.alert-success').text("");
 	$('.alert-success').hide();
 }
 
-function showSuccessAlert(text)
-{
+function showSuccessAlert(text) {
 	$('.alert-success').text(text);
 	$('.alert-success').show();
 	setTimeout(hideSuccessAlert, 3000);
 }
 
-function hideDangerAlert()
-{
+function hideDangerAlert() {
 	$('.alert-danger').text("");
 	$('.alert-danger').hide();
 }
 
-function showDangerAlert(text)
-{
+function showDangerAlert(text) {
 	$('.alert-danger').text(text);
 	$('.alert-danger').show();
 	setTimeout(hideDangerAlert, 2000);

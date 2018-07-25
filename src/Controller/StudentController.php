@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
@@ -34,7 +32,6 @@ class StudentController extends JsonController
             $direction = $request->query->get('direction');
         }
 
-        $rep = $this->getDoctrine()->getRepository(Student::class);
         $rep = $this->getDoctrine()->getManager()->getRepository(Student::class);
         $students = $rep->studentOrder($sort, $direction, $page, 3);
         return new JsonResponse($this->get("serializer")->normalize(['students' => $students, 'url' => '/school/', 'page' => $page]), 200);
@@ -43,7 +40,7 @@ class StudentController extends JsonController
     /**
      * @Route("/", name="index")
      */
-    public function index(Request $request, $page = 1)
+    public function index($page = 1)
     {
         $rep = $this->getDoctrine()->getRepository(Student::class);
         $addForm = $this->createForm(StudentType::class);
@@ -73,7 +70,6 @@ class StudentController extends JsonController
      */
     public function single($id)
     {
-        sleep(1);
         $st = $this->getDoctrine()->getRepository(Student::class)->find($id);
         return new JsonResponse($this->get("serializer")->normalize([
             'student' => $st
