@@ -19,6 +19,14 @@ use App\Forms\UploadImageType;
 
 class AdminController extends JsonController
 {
+    private $dispatcher;
+    public function __construct()
+    {
+        $this->dispatcher = new EventDispatcher();
+        $subscriber = new StudentEditSubscriber();
+        $this->dispatcher->addSubscriber($subscriber);
+    }
+
     /**
      * @Route("/login", name="login")
      * @Method({"GET"})
@@ -67,10 +75,6 @@ class AdminController extends JsonController
      */
     public function editAction(Request $request)
     {
-        $dispatcher = new EventDispatcher();
-        $subscriber = new StudentEditSubscriber();
-        $dispatcher->addSubscriber($subscriber);
-
         $student = new Student();
         $form = $this->createForm(UploadImageType::class, $student);
         $form->handleRequest($request);
@@ -85,7 +89,7 @@ class AdminController extends JsonController
                 $student->setAvatar('/web/img/avatars/'.$fileName);
 
                 $event = new StudentEditEvent($student);
-                $dispatcher->dispatch(StudentEditEvent::NAME, $event);
+                $this->dispatcher->dispatch(StudentEditEvent::NAME, $event);
 
                 $this->getDoctrine()->getManager()->flush();
 
