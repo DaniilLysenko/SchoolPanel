@@ -27,3 +27,4 @@ services:
         class: 'App\Serializer\Normalizer\TeacherNormalizer'
         tags: [serializer.normalizer]
         public: false
+

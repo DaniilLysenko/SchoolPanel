@@ -5,7 +5,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\Admin;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AddAdmin extends ContainerAwareCommand
 {
@@ -20,9 +19,7 @@ class AddAdmin extends ContainerAwareCommand
     {
         $admin = new Admin();
         $admin->setUsername($input->getArgument('name'));
-//        $encoded = $encoder->encodePassword($admin, $input->getArgument('password'));
-        $admin->setPassword(password_hash($input->getArgument('password'), PASSWORD_DEFAULT));
-//        $admin->setPassword($input->getArgument('password'));
+        $admin->setPassword($this->getContainer()->get('security.password_encoder')->encodePassword($admin, $input->getArgument('password')));
         $em = $this->getContainer()->get('doctrine')->getManager();
         $em->persist($admin);
         $em->flush();
