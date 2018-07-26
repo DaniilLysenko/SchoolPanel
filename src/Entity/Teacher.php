@@ -27,7 +27,7 @@ class Teacher
 
     /**
      * @ORM\Column(type="string", length=150)
-     * @Assert\Length(min = 5,max = 100, minMessage="Corse should be more than {{ limit }} characters")
+     * @Assert\Length(min = 5,max = 100, minMessage="Course should be more than {{ limit }} characters")
      * @Assert\NotBlank(message="Course can not be blank")
      */
     private $course;

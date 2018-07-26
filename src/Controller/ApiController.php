@@ -45,7 +45,7 @@ class ApiController extends JsonController
         if ($student) {
             $this->getDoctrine()->getManager()->remove($student);
             $this->getDoctrine()->getManager()->flush();
-            return new JsonResponse(['success' => "Student deleted succefully"], 200);
+            return new JsonResponse(['success' => "Student deleted successfully"], 200);
         }
         return new JsonResponse(['errors' => ['Student not found']], 400);
     }
@@ -161,7 +161,7 @@ class ApiController extends JsonController
         
         $em->persist($student);
         $em->flush();
-        return new JsonResponse(['success' => "Teacher removed successfuly"], 200);
+        return new JsonResponse(['success' => "Teacher removed successfully"], 200);
     }
 
     /**

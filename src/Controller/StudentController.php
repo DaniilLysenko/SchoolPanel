@@ -129,7 +129,7 @@ class StudentController extends JsonController
         
         $em->persist($student);
         $em->flush();
-        return new JsonResponse(['success' => "Teacher removed successfuly"], 200);
+        return new JsonResponse(['success' => "Teacher removed successfully"], 200);
     }
 
     /**
