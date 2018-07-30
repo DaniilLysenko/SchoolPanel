@@ -6,7 +6,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use App\Entity\Student;
 use App\Entity\Teacher;
@@ -19,7 +18,7 @@ use App\Forms\UploadImageType;
 class StudentController extends JsonController
 {
     /**
-     * @Route("/school/{page}", name="studentList")
+     * @Route("/school/{page}", name="studentList", methods={"GET"})
      */
     public function studentListAction(Request $request, $page = 1)
     {
@@ -38,7 +37,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/", name="index")
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index($page = 1)
     {
@@ -66,7 +65,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/single/{id}", name="singleStudent")
+     * @Route("/single/{id}", name="singleStudent", methods={"GET"})
      */
     public function single($id)
     {
@@ -81,7 +80,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/allTeachers/{id}", name="teachers")
+     * @Route("/allTeachers/{id}", name="teachers", methods={"GET"})
      */
     public function teachers($id)
     {
@@ -92,8 +91,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/addTeacher", name="addTeacher")
-     * @Method({"POST"})
+     * @Route("/addTeacher", name="addTeacher", methods={"POST"})
      */
     public function addTeacherAction(Request $request)
     {
@@ -113,8 +111,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/removeTeacher/{sid}/{tid}", name="removeTeacher")
-     * @Method({"GET"})
+     * @Route("/removeTeacher/{sid}/{tid}", name="removeTeacher", methods={"GET"})
      */
     public function removeTeacherAction($sid, $tid)
     {
@@ -136,8 +133,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/search", name="searchStudent")
-     * @Method({"POST"})
+     * @Route("/search", name="searchStudent", methods={"POST"})
      */
     public function searchAction(Request $request, $page = 1)
     {
@@ -159,8 +155,7 @@ class StudentController extends JsonController
     }
 
     /**
-     * @Route("/search/{query}/{page}", name="search")
-     * @Method({"GET"})
+     * @Route("/search/{query}/{page}", name="search", methods={"GET"})
      */
     public function searchPag(Request $request, $query, $page = 1)
     {

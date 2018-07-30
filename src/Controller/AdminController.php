@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,8 +27,7 @@ class AdminController extends JsonController
     }
 
     /**
-     * @Route("/login", name="login")
-     * @Method({"GET"})
+     * @Route("/login", name="login", methods={"GET"})
      */
     public function index()
     {
@@ -37,8 +35,7 @@ class AdminController extends JsonController
     }
 
     /**
-     * @Route("/add", name="add")
-     * @Method({"POST"})
+     * @Route("/add", name="add", methods={"POST"})
      */
     public function addAction(Request $request)
     {
@@ -55,8 +52,7 @@ class AdminController extends JsonController
     }
 
     /**
-     * @Route("/remove/{id}", name="remove")
-     * @Method({"GET"})
+     * @Route("/remove/{id}", name="remove", methods={"GET"})
      */
     public function removeAction($id)
     {
@@ -70,8 +66,7 @@ class AdminController extends JsonController
     }
 
     /**
-     * @Route("/edit", name="edit"),
-     * @Method({"POST"})
+     * @Route("/edit", name="edit", methods={"POST"})
      */
     public function editAction(Request $request)
     {

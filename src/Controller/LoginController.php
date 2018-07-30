@@ -5,15 +5,13 @@ namespace App\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends Controller
 {
     /**
-     * @Route("/login", name="loginAction")
-     * @Method({"POST"})
+     * @Route("/login", name="loginAction", methods={"POST"})
      */
     public function loginAction(AuthenticationUtils $authenticationUtils)
     {

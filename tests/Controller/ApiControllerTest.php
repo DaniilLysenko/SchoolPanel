@@ -19,7 +19,7 @@ class ApiControllerTest extends WebTestCase
     public function testAddAction()
     {
         $data = ["student" =>
-            ["name" => "Name Vut", "age" => 2, "sex" => "man", "phone" => "0987654321"]
+            ["name" => "Name Vut", "age" => 2, "sex" => "1", "phone" => "0987654321"]
         ];
         $client = new Client(['base_uri' => 'http://symstud.loc/api/']);
         $response = $client->post('add', [RequestOptions::JSON => $data]);
