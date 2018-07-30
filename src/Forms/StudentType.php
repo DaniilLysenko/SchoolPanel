@@ -29,7 +29,8 @@ class StudentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => Student::class
+            'data_class' => Student::class,
+            'csrf_protection' => false
         ));
     }
 }

@@ -2,9 +2,9 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Mcfedr\JsonFormBundle\Controller\JsonController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 // Entities
 use App\Entity\Student;
@@ -20,8 +20,7 @@ class ApiController extends JsonController
     private $sort = 's.id';
     private $direction = 'desc';
     /**
-     * @Route("/api/add", name="addStudent")
-     * @Method({"POST"})
+     * @Route("/api/add", name="addStudent", methods={"POST"})
      */
     public function addAction(Request $request)
     {
@@ -36,8 +35,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/delete/{id}", name="deleteStudent")
-     * @Method({"GET"})
+     * @Route("/api/delete/{id}", name="deleteStudent", methods={"GET"})
      */
     public function deleteAction($id)
     {
@@ -51,8 +49,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/edit/{id}", name="editStudent")
-     * @Method({"POST"})
+     * @Route("/api/edit/{id}", name="editStudent", methods={"POST"})
      */
     public function editAction(Request $request, $id)
     {
@@ -70,8 +67,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/student/{id}", name="student")
-     * @Method({"GET"})
+     * @Route("/api/student/{id}", name="student", methods={"GET"})
      */
     public function singleStudentAction($id)
     {
@@ -85,8 +81,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/studentTeachers/{id}", name="studentTeachers")
-     * @Method({"POST"})
+     * @Route("/api/studentTeachers/{id}", name="studentTeachers", methods={"POST"})
      */
     public function studentTeachersAction($id)
     {
@@ -99,8 +94,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/teachers", name="allTeachers")
-     * @Method({"GET"})
+     * @Route("/api/teachers", name="allTeachers", methods={"GET"})
      */
     public function teachersAction()
     {
@@ -109,8 +103,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/teachers/add", name="addStudentTeacher")
-     * @Method({"POST"})
+     * @Route("/api/teachers/add", name="addStudentTeacher", methods={"POST"})
      */
     public function addStudentTeacherAction(Request $request)
     {
@@ -142,8 +135,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/teachers/remove/{sid}/{tid}", name="removeStudentTeacher")
-     * @Method({"GET"})
+     * @Route("/api/teachers/remove/{sid}/{tid}", name="removeStudentTeacher", methods={"GET"})
      */
     public function removeStudentTeacherAction($tid, $sid)
     {
@@ -165,8 +157,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/school/{page}")
-     * @Method({"GET"})
+     * @Route("/api/school/{page}", methods={"GET"})
      */
     public function schoolPaginateAction(Request $request, $page = 1)
     {
@@ -184,8 +175,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/search", name="studentApiSearch")
-     * @Method({"POST"})
+     * @Route("/api/search", name="studentApiSearch", methods={"POST"})
      */
     public function searchAction(Request $request)
     {
@@ -200,8 +190,7 @@ class ApiController extends JsonController
     }
 
     /**
-     * @Route("/api/search/{query}/{page}")
-     * @Method({"GET"})
+     * @Route("/api/search/{query}/{page}", methods={"GET"})
      */
     public function searchPaginateAction(Request $request, $query, $page = 1)
     {

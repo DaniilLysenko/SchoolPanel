@@ -72,6 +72,9 @@ class StudentController extends JsonController
     {
         sleep(1);
         $st = $this->getDoctrine()->getRepository(Student::class)->find($id);
+        if (!$st) {
+            return new JsonResponse(['errors' => "Student not found"], 400);
+        }
         return new JsonResponse($this->get("serializer")->normalize([
             'student' => $st
         ]), 200);
